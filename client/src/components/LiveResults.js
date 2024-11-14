@@ -12,12 +12,14 @@ const LiveResults = () => {
     { name: 'SUPER KALYAN', time: '06:00 PM', secondTime: '08:00 PM', numbers: '478 - 90 - 280' }
   ];
 
-  const handleJodiChartClick = () => {
-    navigate('/jodi-chart');
+  const handleJodiChartClick = (result) => {
+    navigate('/jodi-chart', { state: { marketName: result.name, resultNumbers: result.numbers } });
   };
 
-  const handlePanelChartClick = () => {
-    navigate('/panel-chart');
+ 
+
+  const handlePanelChartClick = (result) => {
+    navigate('/panel-chart' , { state: { marketName: result.name, resultNumbers: result.numbers } });
   };
 
   return (
@@ -59,7 +61,7 @@ const LiveResults = () => {
             <div className="flex justify-between w-full mt-2">
               {/* Left Button */}
               <button
-                onClick={handleJodiChartClick}
+                onClick={() => handleJodiChartClick(result)}
                 className=" bg-gradient-to-r from-[#3838E9] to-[#3F74F5] text-white py-2 px-4 rounded-br-2xl rounded-tl-2xl transform transition duration-300 hover:bg-blue-600"
                 style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: '400' }}
               >
@@ -68,7 +70,7 @@ const LiveResults = () => {
               
               {/* Right Button */}
               <button
-                onClick={handlePanelChartClick}
+                onClick={() => handlePanelChartClick(result)}
                 className=" bg-gradient-to-r from-[#3838E9] to-[#3F74F5] text-white py-2 px-4 rounded-br-2xl rounded-tl-2xl transform transition duration-300 hover:bg-blue-600"
                 style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: '400' }}
               >

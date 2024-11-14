@@ -4,22 +4,23 @@ import Navbar from './Navbar';
 import banner from '../assets/matkabanner.gif';
 import Footer from './Footer';
 
-const JodiChart = () => {
+const ChartPage = () => {
   const location = useLocation();
-  const { marketName, resultNumbers } = location.state || {};
+  const { marketName, resultNumbers } = location.state || {};  // Access state with fallback
+
+  // Console log to check received values
+  console.log('Received Market Name:', marketName);  // Should print the market name
+  console.log('Received Result Numbers:', resultNumbers);  // Should print the result numbers
 
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
-
-  console.log('Received Market Name:', marketName);
-  console.log('Received Result Numbers:', resultNumbers);
 
   const handleViewChart = () => {
     console.log('From Date:', fromDate);
     console.log('To Date:', toDate);
   };
 
-  // Table data array
+  // Table data array (for the table rendering example)
   const tableData = [
     [40, 71, 98, 78, 30, 7, 86],
     [21, 72, 20, 21, 7, 19, 11],
@@ -28,7 +29,7 @@ const JodiChart = () => {
     [11, 2, 2, 36, 80, 13, 80]
   ];
 
-  // Weekday names
+  // Weekday names for table header
   const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   return (
@@ -37,7 +38,6 @@ const JodiChart = () => {
 
       {/* Outer container with max width */}
       <div className="flex flex-col items-center mt-6 mx-auto max-w-3xl">
-
         {/* Banner Image */}
         <div className="w-full">
           <img src={banner} alt="Banner" className="rounded-lg shadow-lg w-full" style={{ height: 'auto' }} />
@@ -45,6 +45,7 @@ const JodiChart = () => {
 
         {/* Content Section */}
         <div className="p-6 w-full">
+          {/* Market Name Heading */}
           <h3 className="text-xl font-semibold bg-gradient-to-r from-[#3838E9] to-[#3F74F5] text-white py-2 px-6 mt-4 mb-2 rounded-tl-3xl rounded-br-3xl text-center" 
               style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: '600' }}>
             {marketName || 'Default Market Name'}<br />
@@ -66,7 +67,6 @@ const JodiChart = () => {
 
         {/* Date Range Selection */}
         <div className="p-6 w-full flex flex-col items-center">
-          
           <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full justify-center">
             {/* From Date */}
             <div className="flex flex-col items-center">
@@ -104,39 +104,39 @@ const JodiChart = () => {
             View Chart
           </button>
         </div>
-{/* Table Section */}
-<div className="w-full mt-6 mb-4 bg-gray-100 rounded-lg shadow-lg p-6">
-  <table 
-    className="table-auto w-full text-lg font-semibold" 
-    style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: '700', borderRadius: '8px', overflow: 'hidden' }} // Rounded corners for the table
-  >
-    <thead>
-      <tr className="text-white bg-gradient-to-r from-[#3838E9] to-[#3F74F5]">
-        {daysOfWeek.map((day, index) => (
-          <th key={index} className="px-4 py-2 text-center">{day}</th>
-        ))}
-      </tr>
-    </thead>
-    <tbody>
-      {tableData.map((row, rowIndex) => (
-        <tr key={rowIndex} className="text-center">
-          {row.map((cell, cellIndex) => (
-            <td
-              key={cellIndex}
-              className="border border-[#3838E9] px-4 py-2"
-              style={{
-                borderRadius: '8px', // Apply rounded borders to each cell
-              }}
-            >
-              {cell}
-            </td>
-          ))}
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
 
+        {/* Table Section */}
+        <div className="w-full mt-6 mb-4 bg-gray-100 rounded-lg shadow-lg p-6">
+          <table 
+            className="table-auto w-full text-lg font-semibold" 
+            style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: '700', borderRadius: '8px', overflow: 'hidden' }} // Rounded corners for the table
+          >
+            <thead>
+              <tr className="text-white bg-gradient-to-r from-[#3838E9] to-[#3F74F5]">
+                {daysOfWeek.map((day, index) => (
+                  <th key={index} className="px-4 py-2 text-center">{day}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((row, rowIndex) => (
+                <tr key={rowIndex} className="text-center">
+                  {row.map((cell, cellIndex) => (
+                    <td
+                      key={cellIndex}
+                      className="border border-[#3838E9] px-4 py-2"
+                      style={{
+                        borderRadius: '8px', // Apply rounded borders to each cell
+                      }}
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         {/* Repeated Market and Result Info */}
         <div className="p-6 w-full">
@@ -158,4 +158,4 @@ const JodiChart = () => {
   );
 };
 
-export default JodiChart;
+export default ChartPage;
