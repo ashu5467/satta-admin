@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const Navbar = () => {
@@ -11,24 +12,26 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`flex justify-between items-center px-6 py-4 relative transition-all duration-300 ${isMenuOpen ? 'bg-[#2d2d8d]' : 'bg-[#3838E9]'} text-white`} style={{ fontFamily: 'Ubuntu' }}>
+    <nav className={`flex justify-between items-center px-6 py-4 relative transition-all duration-300 ${isMenuOpen ? 'bg-[#2d2d8d]' : ' bg-gradient-to-r from-[#3838E9] to-[#3F74F5]'} text-white`} style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600 }}>
       {/* Logo */}
-      <div className="text-2xl font-bold justify-content-center">MatkaApp</div>
+      <div className="text-2xl font-bold justify-content-center" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600 }}>
+        MatkaApp
+      </div>
 
       {/* Desktop Menu (only visible when side menu is closed) */}
       <div className={`hidden lg:flex items-center space-x-6 ${isMenuOpen ? 'hidden' : ''}`}>
         <ul className="flex space-x-6">
           <li>
-            <a href="#home" className="hover:text-gray-400">Home</a>
+            <Link to="/" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600 }}>Home</Link>
           </li>
           <li>
-            <a href="#about-matka" className="hover:text-gray-400">About Matka</a>
+            <Link to="/about-matka" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600 }}>About Matka</Link>
           </li>
           <li>
-            <a href="#learn-matka" className="hover:text-gray-400">Learn Matka</a>
+            <Link to="/learn-matka" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600 }}>Learn Matka</Link>
           </li>
           <li>
-            <a href="#guess-matka" className="hover:text-gray-400">Guess Matka</a>
+            <Link to="/guess-matka" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600 }}>Guess Matka</Link>
           </li>
         </ul>
       </div>
@@ -41,7 +44,7 @@ const Navbar = () => {
       {/* Side Menu */}
       <div
         className={`lg:hidden fixed top-0 right-0 w-64 h-full bg-white text-black transform ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 z-50`}
-        style={{ fontFamily: 'Ubuntu' }}
+        style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600 }}
       >
         {/* Close Button */}
         <div className="flex justify-end p-6">
@@ -52,16 +55,16 @@ const Navbar = () => {
         
         <ul className="space-y-6 p-6">
           <li>
-            <a href="#home" className="hover:text-gray-400 underline">Home</a>
+            <Link to="#home" className="hover:text-gray-400 underline" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 400 }}>Home</Link>
           </li>
           <li>
-            <a href="#about-matka" className="hover:text-gray-400 underline">About Matka</a>
+            <Link to="#about-matka" className="hover:text-gray-400 underline" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 400 }}>About Matka</Link>
           </li>
           <li>
-            <a href="#learn-matka" className="hover:text-gray-400 underline">Learn Matka</a>
+            <Link to="#learn-matka" className="hover:text-gray-400 underline" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 400 }}>Learn Matka</Link>
           </li>
           <li>
-            <a href="#guess-matka" className="hover:text-gray-400 underline">Guess Matka</a>
+            <Link to="#guess-matka" className="hover:text-gray-400 underline" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 400 }}>Guess Matka</Link>
           </li>
         </ul>
       </div>

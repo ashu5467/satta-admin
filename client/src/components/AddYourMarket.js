@@ -59,15 +59,35 @@ const AddYourMarket = () => {
   return (
     <div className="flex flex-col items-center p-6">
       {/* Underlined Heading */}
-      <h1 className="text-2xl font-semibold text-[#3838E9] mb-6" style={{ fontFamily: 'Ubuntu', fontWeight: '600', textDecoration: 'underline' }}>
+      <h1 className="text-2xl font-semibold text-black mb-6" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: '600', textDecoration: 'underline' }}>
         ADD YOUR MARKET
       </h1>
+
+      {/* White Card for Informational Text */}
+      <div 
+        className="bg-white shadow-lg rounded-2xl p-6 mb-6 w-full max-w-2xl text-center text-gray-700" 
+        style={{ fontFamily: 'Segoe UI, sans-serif' }}
+      >
+        <p className='text-green-500'>
+          SATTAMATKA/SATTA MATKA<br /><br />
+          अगर आप खुद का मटका बाजार चलाते हैं, और अपने बाजार का रिजल्ट हमारी वेबसाइट पर डलवाना चाहते हैं, तो आज ही हमसे संपर्क करें.<br /><br />
+          आपके बाजार का एडमिन पैनल आपको बना के दिया जायेगा, जिससे आप अपने बाजार का रिजल्ट अपडेट कर सकेंगे.<br />
+          आपके बाजार का पुराना रिकॉर्ड भी वेबसाइट पर दाल दिया जाएगा<br /><br />
+          Do you want to start a new market? or if do you have already pre-owned market, you can publish your market results on sattaresults.mobi without monthly charges.<span className='text-red-500'> (FREE)</span><br /><br />
+          Contact Admin<br />
+          (WHATSAPP: 9490156188)
+        </p>
+      </div>
+
+      <h3 className="text-xl font-semibold bg-gradient-to-r from-[#3838E9] to-[#3F74F5] text-white py-2 px-6 mt-4 mb-2 rounded-br-xl rounded-tl-xl max-w-full text-center sm:px-12 md:px-32 lg:px-60" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: '600' }}>
+        Chart List
+      </h3>
 
       {/* Mapping over chartNames to render each chart as a card with logo */}
       {chartNames.map((chart, index) => (
         <div 
           key={index}
-          className="flex items-center justify-center p-4 mt-2 w-full max-w-2xl mx-auto sm:w-full sm:px-6 lg:w-[90%] xl:w-[80%]" 
+          className="flex items-center justify-center p-4 mt-2 w-full max-w-2xl mx-auto sm:w-full sm:px-6 lg:w-[90%] xl:w-[70%]" 
           style={{ 
             background: 'rgb(255, 255, 255)', 
             color: 'rgb(20, 25, 51)', 
@@ -83,12 +103,12 @@ const AddYourMarket = () => {
           />
 
           {/* Chart Name */}
-          <p className="text-lg font-bold text-center" style={{ fontFamily: 'Ubuntu', margin: 0, padding: 0 }}>
+          <p className="text-base font-semibold text-center" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600, margin: 0, padding: 0 }}>
             {chart}
           </p>
         </div>
       ))}
-      
+
       <style jsx>{`
         /* Animation for logo */
         .animate-pointing {

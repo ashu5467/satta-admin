@@ -59,7 +59,7 @@ const PanelList = () => {
   return (
     <div className="flex flex-col items-center p-6">
       {/* Underlined Heading */}
-      <h3 className="text-2xl font-bold bg-[#3838E9] text-white py-2 px-6 mt-4 rounded-br-xl rounded-tl-xl max-w-full text-center sm:px-12 md:px-32 lg:px-60">
+      <h3 className="text-xl font-semibold bg-gradient-to-r from-[#3838E9] to-[#3F74F5] text-white py-2 px-6 mt-4 mb-2 rounded-br-xl rounded-tl-xl max-w-full text-center sm:px-12 md:px-32 lg:px-60" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600 }}>
         Panel Chart List
       </h3>
       
@@ -67,7 +67,7 @@ const PanelList = () => {
       {chartNames.map((chart, index) => (
         <div 
           key={index}
-          className="flex items-center justify-center p-4 mt-2 w-full max-w-xl mx-auto sm:w-full sm:px-6 lg:max-w-2xl xl:max-w-3xl"
+          className="flex items-center justify-center p-4 mt-2 w-full max-w-2xl mx-auto sm:w-full sm:px-6 lg:w-[90%] xl:w-[70%]"
           style={{ 
             background: 'rgb(255, 255, 255)', 
             color: 'rgb(20, 25, 51)', 
@@ -82,8 +82,8 @@ const PanelList = () => {
             className="h-8 w-8 mr-4 animate-pointing"
           />
 
-          {/* Chart Name */}
-          <p className="text-lg font-bold text-center" style={{ fontFamily: 'Ubuntu', margin: 0, padding: 0 }}>
+          {/* Chart Name with Segoe UI font and font weight of 600 */}
+          <p className="text-base font-semibold text-center" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: 600, margin: 0, padding: 0 }}>
             {chart}
           </p>
         </div>
