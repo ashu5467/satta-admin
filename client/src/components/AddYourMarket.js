@@ -1,67 +1,66 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import logo from '../assets/finger.png';
 
 const AddYourMarket = () => {
-  // Array of results
   const results = [
-    { name: 'ADD UR MARKET FREE', numbers: '1234, 5678, 9123' },
-    { name: 'MILAN MORNING', numbers: '1111, 2222, 3333' },
-    { name: 'MILAN DAY', numbers: '4444, 5555, 6666' },
-    { name: 'MILAN NIGHT', numbers: '7777, 8888, 9999' },
-    { name: 'TIME BAZAR', numbers: '1000, 2000, 3000' },
-    { name: 'NIGHT TIME BAZAR', numbers: '1010, 2020, 3030' },
-    { name: 'KALYAN', numbers: '5000, 6000, 7000' },
-    { name: 'KALYAN NIGHT', numbers: '1500, 2500, 3500' },
-    { name: 'GABBAR', numbers: '5555, 6666, 7777' },
-    { name: 'GABBAR NIGHT', numbers: '8888, 9999, 1111' },
-    { name: 'SRIDEVI', numbers: '1234, 5678, 8765' },
-    { name: 'SRIDEVI BAZAR', numbers: '4321, 8765, 5432' },
-    { name: 'SRIDEVI NIGHT', numbers: '9999, 8888, 7777' },
-    { name: 'SRIDEVI BAZAR NIGHT', numbers: '6666, 5555, 4444' },
-    { name: 'SATTA MATKA MORNING (SATTA MORNING)', numbers: '1357, 2468, 3579' },
-    { name: 'SATTA MATKA DAY (SATTA DAY)', numbers: '4321, 8765, 5432' },
-    { name: 'SATTA MATKA NIGHT (SATTA NIGHT)', numbers: '1111, 2222, 3333' },
-    { name: 'SUPREME DAY', numbers: '9876, 6543, 3210' },
-    { name: 'SUPREME NIGHT', numbers: '1234, 4321, 5678' },
-    { name: 'RAJDHANI DAY', numbers: '2222, 3333, 4444' },
-    { name: 'RAJDHANI NIGHT', numbers: '5555, 6666, 7777' },
-    { name: 'MORNING KUBER', numbers: '7777, 8888, 9999' },
-    { name: 'KUBER DAY', numbers: '1001, 1002, 1003' },
-    { name: 'KUBER NIGHT', numbers: '2001, 2002, 2003' },
-    { name: 'SUPER KALYAN', numbers: '2345, 3456, 4567' },
-    { name: 'SUPER MUMBAI DAY', numbers: '6543, 3210, 8765' },
-    { name: 'MAIN MILAN DAY', numbers: '1111, 2222, 3333' },
-    { name: 'MILAN DAY (SPECIAL)', numbers: '4444, 5555, 6666' },
-    { name: 'MILAN NIGHT (SPECIAL)', numbers: '7777, 8888, 9999' },
-    { name: 'CG DAY', numbers: '1111, 3333, 5555' },
-    { name: 'CG NIGHT', numbers: '2222, 4444, 6666' },
-    { name: 'CENTRAL BOMBAY', numbers: '1357, 2468, 3579' },
-    { name: 'CENTRAL BOMBAY NIGHT', numbers: '4321, 8765, 5432' },
-    { name: 'TARA MUMBAI DAY', numbers: '9876, 6543, 3210' },
-    { name: 'TARA MUMBAI NIGHT', numbers: '1234, 4321, 5678' },
-    { name: 'MADHUR MORNING', numbers: '2345, 3456, 4567' },
-    { name: 'MADHUR DAY', numbers: '6543, 3210, 8765' },
-    { name: 'MADHUR NIGHT', numbers: '1001, 1002, 1003' },
-    { name: 'MUMBAI MAIL', numbers: '2001, 2002, 2003' },
-    { name: 'MUMBAI MAIL NIGHT', numbers: '9876, 6543, 3210' },
-    { name: 'MUMBAI DHAMAKA', numbers: '5555, 6666, 7777' },
-    { name: 'BOMBAY MARKET', numbers: '7777, 8888, 9999' },
-    { name: 'NEW MUMBAI ROYAL', numbers: '1111, 2222, 3333' },
-    { name: 'MINI MUMBAI', numbers: '4444, 5555, 6666' },
-    { name: 'MAIN RATAN', numbers: '7777, 8888, 9999' },
-    { name: 'RAJRATAN', numbers: '1001, 2001, 3001' },
-    { name: 'RAJRATAN NIGHT', numbers: '4001, 5001, 6001' },
-    { name: 'MAIN BAZAR', numbers: '7001, 8001, 9001' },
-    { name: 'MAIN KALYAN', numbers: '10001, 20001, 30001' },
-    { name: 'EVENING KALYAN', numbers: '40001, 50001, 60001' }
-  ]
-  ;
+    { name: 'ADD UR MARKET FREE', numbers: '193, 90, 102' },
+    { name: 'MILAN MORNING', numbers: '111, 22, 333' },
+    { name: 'MILAN DAY', numbers: '444, 55, 666' },
+    { name: 'MILAN NIGHT', numbers: '777, 88, 999' },
+    { name: 'TIME BAZAR', numbers: '100, 20, 300' },
+    { name: 'NIGHT TIME BAZAR', numbers: '101, 20, 303' },
+    { name: 'KALYAN', numbers: '500, 60, 700' },
+    { name: 'KALYAN NIGHT', numbers: '150, 25, 350' },
+    { name: 'GABBAR', numbers: '555, 66, 777' },
+    { name: 'GABBAR NIGHT', numbers: '888, 99, 111' },
+    { name: 'SRIDEVI', numbers: '123, 56, 876' },
+    { name: 'SRIDEVI BAZAR', numbers: '432, 87, 543' },
+    { name: 'SRIDEVI NIGHT', numbers: '999, 88, 777' },
+    { name: 'SRIDEVI BAZAR NIGHT', numbers: '666, 55, 444' },
+    { name: 'SATTA MATKA MORNING (SATTA MORNING)', numbers: '135, 24, 357' },
+    { name: 'SATTA MATKA DAY (SATTA DAY)', numbers: '432, 87, 543' },
+    { name: 'SATTA MATKA NIGHT (SATTA NIGHT)', numbers: '111, 22, 333' },
+    { name: 'SUPREME DAY', numbers: '987, 65, 321' },
+    { name: 'SUPREME NIGHT', numbers: '123, 43, 567' },
+    { name: 'RAJDHANI DAY', numbers: '222, 33, 444' },
+    { name: 'RAJDHANI NIGHT', numbers: '555, 66, 777' },
+    { name: 'MORNING KUBER', numbers: '777, 88, 999' },
+    { name: 'KUBER DAY', numbers: '100, 10, 103' },
+    { name: 'KUBER NIGHT', numbers: '200, 20, 203' },
+    { name: 'SUPER KALYAN', numbers: '234, 34, 456' },
+    { name: 'SUPER MUMBAI DAY', numbers: '654, 32, 876' },
+    { name: 'MAIN MILAN DAY', numbers: '111, 22, 333' },
+    { name: 'MILAN DAY (SPECIAL)', numbers: '444, 55, 666' },
+    { name: 'MILAN NIGHT (SPECIAL)', numbers: '777, 88, 999' },
+    { name: 'CG DAY', numbers: '111, 33, 555' },
+    { name: 'CG NIGHT', numbers: '222, 44, 666' },
+    { name: 'CENTRAL BOMBAY', numbers: '135, 24, 357' },
+    { name: 'CENTRAL BOMBAY NIGHT', numbers: '432, 87, 543' },
+    { name: 'TARA MUMBAI DAY', numbers: '987, 65, 321' },
+    { name: 'TARA MUMBAI NIGHT', numbers: '123, 43, 567' },
+    { name: 'MADHUR MORNING', numbers: '234, 34, 456' },
+    { name: 'MADHUR DAY', numbers: '654, 32, 876' },
+    { name: 'MADHUR NIGHT', numbers: '100, 10, 103' },
+    { name: 'MUMBAI MAIL', numbers: '200, 20, 203' },
+    { name: 'MUMBAI MAIL NIGHT', numbers: '987, 65, 321' },
+    { name: 'MUMBAI DHAMAKA', numbers: '555, 66, 777' },
+    { name: 'BOMBAY MARKET', numbers: '777, 88, 999' },
+    { name: 'NEW MUMBAI ROYAL', numbers: '111, 22, 333' },
+    { name: 'MINI MUMBAI', numbers: '444, 55, 666' },
+    { name: 'MAIN RATAN', numbers: '777, 88, 999' },
+    { name: 'RAJRATAN', numbers: '100, 20, 301' },
+    { name: 'RAJRATAN NIGHT', numbers: '400, 50, 601' },
+    { name: 'MAIN BAZAR', numbers: '700, 80, 901' },
+    { name: 'MAIN KALYAN', numbers: '100, 20, 300' },
+    { name: 'EVENING KALYAN', numbers: '400, 50, 600' }
+  ];
+  
 
-  // Initialize useNavigate hook
+
+
   const navigate = useNavigate();
 
-  // Function to handle navigation
   const handleNavigate = (result) => {
     navigate(`/chart/${result.name}`, {
       state: {
@@ -73,12 +72,10 @@ const AddYourMarket = () => {
 
   return (
     <div className="flex flex-col items-center p-6">
-      {/* Underlined Heading */}
       <h1 className="text-2xl font-semibold text-black mb-6" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: '600', textDecoration: 'underline' }}>
         ADD YOUR MARKET
       </h1>
 
-      {/* White Card for Informational Text */}
       <div 
         className="bg-white shadow-lg rounded-2xl p-6 mb-6 w-full max-w-2xl text-center text-gray-700" 
         style={{ fontFamily: 'Segoe UI, sans-serif' }}
@@ -98,12 +95,17 @@ const AddYourMarket = () => {
         Chart List
       </h3>
 
-      {/* Mapping over results to render each chart as a card with logo */}
       {results.map((result) => (
         <div
           key={result.name}
-          onClick={() => handleNavigate(result)}  // Use handleNavigate to navigate with state
-          className="flex items-center justify-center p-4 mt-2 w-full max-w-2xl mx-auto cursor-pointer"
+          onClick={() => handleNavigate(result)}
+          className="flex items-center justify-center p-4 mt-2 w-full max-w-2xl mx-auto cursor-pointer sm:w-full sm:px-6 lg:w-[90%] xl:w-[70%]"
+          style={{ 
+            background: 'rgb(255, 255, 255)', 
+            color: 'rgb(20, 25, 51)', 
+            borderRadius: '24px', 
+            boxShadow: 'rgba(36, 42, 209, 0.25) 0px 2px 15px',
+          }}
         >
           <img src={logo} alt="Logo" className="h-8 w-8 mr-4 animate-pointing" />
           <p className="text-base font-semibold text-center" style={{ fontFamily: 'Segoe UI, sans-serif', fontWeight: '600' }}>
@@ -113,12 +115,10 @@ const AddYourMarket = () => {
       ))}
 
       <style jsx>{`
-        /* Animation for logo */
         .animate-pointing {
           animation: point 1s infinite alternate;
         }
 
-        /* Keyframes for the left-to-right pointing effect */
         @keyframes point {
           0% { transform: translateX(0); }
           100% { transform: translateX(10px); }
