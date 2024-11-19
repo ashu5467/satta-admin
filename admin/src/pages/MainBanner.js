@@ -1,21 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const MainBanner = () => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [bannerUrl, setBannerUrl] = useState(null);
+
+  // Fetch the current banner from the backend
+  useEffect(() => {
+    fetchBanner();
+  }, []);
+
+  const fetchBanner = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/banner/get', {
+        responseType: 'blob', // Ensure we get the binary image data
+      });
+
+      const imageUrl = URL.createObjectURL(response.data);
+      setBannerUrl(imageUrl);
+    } catch (error) {
+      console.error('Failed to fetch banner:', error);
+    }
+  };
 
   // Handle image selection
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setSelectedImage(URL.createObjectURL(file));
+      setSelectedImage(file);
     }
   };
 
-  // Handle upload action (this could include API integration for uploading the image to a server)
-  const handleUpload = () => {
+  // Handle upload action
+  const handleUpload = async () => {
     if (selectedImage) {
-      console.log('Image uploaded successfully');
-      // Add API call or any additional upload logic here
+      const formData = new FormData();
+      formData.append('banner', selectedImage);
+
+      try {
+        await axios.post('http://localhost:5000/api/banner/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+
+        alert('Image uploaded successfully');
+        fetchBanner(); // Refresh the displayed banner
+      } catch (error) {
+        console.error('Failed to upload banner:', error);
+        alert('Failed to upload banner.');
+      }
     } else {
       alert('Please select an image to upload.');
     }
@@ -25,19 +57,19 @@ const MainBanner = () => {
     <div className="p-6 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Upload Banner Image</h2>
       <div className="flex flex-col items-center">
-        {/* Image preview */}
-        {selectedImage && (
-          <img src={selectedImage} alt="Selected banner" className="mb-4 w-full h-48 object-cover rounded-lg" />
+        {/* Display banner if it exists */}
+        {bannerUrl && (
+          <img src={bannerUrl} alt="Current banner" className="mb-4 w-full h-48 object-cover rounded-lg" />
         )}
-        
+
         {/* File input */}
-        <input 
-          type="file" 
-          accept="image/*" 
-          onChange={handleImageChange} 
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
           className="mb-4"
         />
-        
+
         {/* Upload button */}
         <button
           onClick={handleUpload}

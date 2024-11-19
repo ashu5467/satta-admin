@@ -1,23 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrashAlt, FaDownload, FaPlus } from 'react-icons/fa';
 import { CSVLink } from 'react-csv';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import axios from 'axios';
 
 const Results = () => {
-  const resultData = [
-    { id: 1, date: '13/11/2024', market: 'KINARA DAY', result: '125-85-168' },
-    { id: 2, date: '14/11/2024', market: 'POONA NIGHT', result: '300-200-400' },
-    { id: 3, date: '14/11/2024', market: 'MUMBAI DAY', result: '100-50-150' },
-    { id: 4, date: '15/11/2024', market: 'DELHI NIGHT', result: '200-100-350' },
-    { id: 5, date: '15/11/2024', market: 'RAJKOT DAY', result: '180-120-250' },
-    // Add more data as needed
-  ];
-
+  const [resultData, setResultData] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for adding new result
   const [newResult, setNewResult] = useState({ date: '', market: '', result: '' });
+  const [editingId, setEditingId] = useState(null);
+
+  useEffect(() => {
+    fetchResults();
+  }, []);
+
+  // Fetch all results from MongoDB
+  const fetchResults = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/results');
+      setResultData(response.data);
+    } catch (error) {
+      console.error('Error fetching results:', error);
+    }
+  };
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const toggleModal = () => setIsModalOpen(!isModalOpen);
@@ -27,7 +35,78 @@ const Results = () => {
     setNewResult({ ...newResult, [name]: value });
   };
 
-  // Export functions
+  // Create new result
+  // const handleAddResult = async () => {
+  //   if (newResult.date && newResult.market && newResult.result) {
+  //     try {
+  //       const response = await axios.post('http://localhost:5000/api/results', newResult);
+  //       setResultData([...resultData, response.data]);
+  //       setNewResult({ date: '', market: '', result: '' });
+  //       setIsModalOpen(false);
+  //     } catch (error) {
+  //       console.error('Error adding result:', error);
+  //     }
+  //   }
+  // };
+
+
+
+  const handleAddResult = () => {
+    setNewResult({ date: '', market: '', result: '' }); // Reset the form
+    setEditingId(null); // Ensure `editingId` is null when adding new result
+    setIsModalOpen(true); // Open the modal
+  };
+
+
+
+
+
+
+
+  const handleEditResult = (id) => {
+    const resultToEdit = resultData.find((item) => item._id === id);
+    setNewResult({ date: resultToEdit.date, market: resultToEdit.market, result: resultToEdit.result });
+    setEditingId(id); // Set the result ID to track which result is being edited
+    setIsModalOpen(true); // Open the modal for editing
+  };
+
+
+  const handleSaveResult = async () => {
+  if (newResult.date && newResult.market && newResult.result) {
+    try {
+      if (editingId) {
+        // Update existing result
+        const response = await axios.put(`http://localhost:5000/api/results/${editingId}`, newResult);
+        const updatedResults = resultData.map((item) =>
+          item._id === editingId ? response.data : item
+        );
+        setResultData(updatedResults);
+      } else {
+        // Add new result
+        const response = await axios.post('http://localhost:5000/api/results', newResult);
+        setResultData([...resultData, response.data]);
+      }
+
+      // Reset the form and close modal after saving
+      setNewResult({ date: '', market: '', result: '' });
+      setIsModalOpen(false);
+      setEditingId(null); // Reset editing state
+    } catch (error) {
+      console.error('Error saving result:', error);
+    }
+  }
+};
+  // Delete result
+  const handleDeleteResult = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/results/${id}`);
+      setResultData(resultData.filter((item) => item._id !== id));
+    } catch (error) {
+      console.error('Error deleting result:', error);
+    }
+  };
+
+  // Export functions (same as before)
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(resultData);
     const wb = XLSX.utils.book_new();
@@ -44,14 +123,6 @@ const Results = () => {
       ]),
     });
     doc.save('results.pdf');
-  };
-
-  const handleAddResult = () => {
-    if (newResult.date && newResult.market && newResult.result) {
-      resultData.push({ ...newResult, id: resultData.length + 1 });
-      setNewResult({ date: '', market: '', result: '' });
-      setIsModalOpen(false);
-    }
   };
 
   return (
@@ -73,7 +144,7 @@ const Results = () => {
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-600">Date</label>
                 <input
-                  type="text"
+                  type="date"
                   name="date"
                   value={newResult.date}
                   onChange={handleInputChange}
@@ -82,7 +153,7 @@ const Results = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">Market</label>
+                <label className="block text-sm font-medium text-white-600">Market</label>
                 <input
                   type="text"
                   name="market"
@@ -104,7 +175,9 @@ const Results = () => {
                 />
               </div>
               <div className="flex justify-end">
-                <button onClick={handleAddResult} className="bg-green-500 text-white py-2 px-4 rounded-md mr-2">Add Result</button>
+              <button onClick={handleSaveResult} className="bg-green-500 text-white py-2 px-4 rounded-md mr-2">
+                  {editingId ? 'Save Changes' : 'Add Result'}
+                </button>
                 <button onClick={toggleModal} className="bg-gray-500 text-white py-2 px-4 rounded-md">Cancel</button>
               </div>
             </div>
@@ -147,16 +220,16 @@ const Results = () => {
 
           <tbody>
             {resultData.map((item, index) => (
-              <tr key={item.id} className="bg-white text-gray-700">
+              <tr key={item._id} className="bg-white text-gray-700">
                 <td className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{item.date}</td>
                 <td className="border px-4 py-2">{item.market}</td>
                 <td className="border px-4 py-2">{item.result}</td>
                 <td className="border px-4 py-2 flex space-x-2">
-                  <button className="text-blue-500 hover:text-blue-700">
+                  <button className="text-blue-500 hover:text-blue-700"  onClick={() => handleEditResult(item._id)}>
                     <FaEdit className="inline-block text-lg" />
                   </button>
-                  <button className="text-red-500 hover:text-red-700">
+                  <button className="text-red-500 hover:text-red-700" onClick={() => handleDeleteResult(item._id)}>
                     <FaTrashAlt className="inline-block text-lg" />
                   </button>
                 </td>

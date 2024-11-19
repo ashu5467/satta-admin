@@ -1,32 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrashAlt, FaDownload, FaPlus } from 'react-icons/fa';
 import { CSVLink } from 'react-csv';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import axios from 'axios';
 
 const List = () => {
-  const tableData = [
-    { id: 1, name: 'Kalyan', open: '10:00 AM', close: '6:00 PM', status: 'Active' },
-    { id: 2, name: 'MAIN BAZAR', open: '9:00 AM', close: '5:00 PM', status: 'Inactive' },
-    { id: 3, name: 'POONA DAY', open: '11:00 AM', close: '7:00 PM', status: 'Active' },
-    { id: 4, name: 'Mumbai Night', open: '12:00 AM', close: '8:00 AM', status: 'Active' },
-    { id: 5, name: 'Delhi Express', open: '1:00 PM', close: '9:00 PM', status: 'Inactive' },
-    { id: 6, name: 'Jodhpur Evening', open: '6:00 PM', close: '10:00 PM', status: 'Active' },
-    { id: 7, name: 'Bangladesh Night', open: '11:30 PM', close: '7:30 AM', status: 'Inactive' },
-    { id: 8, name: 'Pune Special', open: '8:00 AM', close: '4:00 PM', status: 'Active' },
-    { id: 9, name: 'Kolhapur Morning', open: '7:00 AM', close: '3:00 PM', status: 'Active' },
-    { id: 10, name: 'Rajkot Day', open: '9:30 AM', close: '5:30 PM', status: 'Inactive' },
-    { id: 11, name: 'Surat Evening', open: '6:30 PM', close: '10:30 PM', status: 'Active' },
-    { id: 12, name: 'Bangalore Morning', open: '5:00 AM', close: '1:00 PM', status: 'Active' },
-    { id: 13, name: 'Chennai Night', open: '12:00 AM', close: '6:00 AM', status: 'Inactive' },
-    { id: 14, name: 'Hyderabad Special', open: '10:30 AM', close: '4:30 PM', status: 'Active' },
-    { id: 15, name: 'Goa Morning', open: '7:30 AM', close: '3:30 PM', status: 'Inactive' },
-  ];
-
+  const [tableData, setTableData] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newMarket, setNewMarket] = useState({ name: '', open: '', close: '', days: '', status: '' });
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Fetch markets data from API on component mount
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/markets')
+      .then(response => {
+        setTableData(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the markets data!', error);
+      });
+  }, []);
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
@@ -67,13 +63,96 @@ const List = () => {
     doc.save('tableData.pdf');
   };
 
+  // Add new market via API
   const handleAddMarket = () => {
-    // Add validation if needed
-    if (newMarket.name && newMarket.open && newMarket.close && newMarket.days && newMarket.status) {
-      tableData.push({ ...newMarket, id: tableData.length + 1 });
-      setNewMarket({ name: '', open: '', close: '', days: '', status: '' });
-      setIsModalOpen(false); // Close modal after adding market
+    if (newMarket.name && newMarket.open && newMarket.close && newMarket.status) {
+      axios.post('http://localhost:5000/api/markets', newMarket)
+        .then(response => {
+          setTableData([...tableData, response.data]);
+          setNewMarket({ name: '', open: '', close: '', days: '', status: '' });
+          setIsModalOpen(false);
+        })
+        .catch(error => {
+          console.error('There was an error adding the market!', error);
+        });
     }
+  };
+
+  // Edit market via API
+  const handleEditMarket = (id) => {
+    console.log("Editing market with ID:", id);  // Make sure you get the correct ID
+    const marketToEdit = tableData.find((item) => item._id === id);  // Use _id here instead of id
+    
+    if (marketToEdit) {
+      console.log("Market to edit:", marketToEdit);
+      setNewMarket({
+        _id: marketToEdit._id,  // Use _id instead of id
+        name: marketToEdit.name,
+        open: marketToEdit.open,
+        close: marketToEdit.close,
+        days: marketToEdit.days,
+        status: marketToEdit.status,
+      });
+      setIsEditing(true);
+      setIsModalOpen(true);
+    } else {
+      console.error("Market not found for editing.");
+    }
+  };
+  
+  // Update market data via API
+  // const handleUpdateMarket = () => {
+  //   if (newMarket.name && newMarket.open && newMarket.close && newMarket.status) {
+  //     axios.put(
+  //       `http://localhost:5000/api/markets/${newMarket.id}`, 
+  //       newMarket, 
+  //       { headers: { 'Content-Type': 'application/json' } }
+  //     )
+  //       .then(response => {
+  //         setTableData(tableData.map(item => item.id === newMarket.id ? response.data : item));
+  //         setNewMarket({ name: '', open: '', close: '', days: '', status: '' });
+  //         setIsEditing(false);
+  //         setIsModalOpen(false);
+  //       })
+  //       .catch(error => {
+  //         console.error('There was an error updating the market!', error);
+  //       });
+  //   }
+  const handleUpdateMarket = () => {
+    if (!newMarket._id) {  // Check for _id instead of id
+      console.error('Market ID is missing!');
+      return;
+    }
+  
+    console.log("Updating market with ID:", newMarket._id);  // Log the _id
+  
+    if (newMarket.name && newMarket.open && newMarket.close && newMarket.status) {
+      axios.put(`http://localhost:5000/api/markets/${newMarket._id}`, newMarket)  // Use _id in the URL
+        .then(response => {
+          console.log("Market updated:", response.data);
+          setTableData(tableData.map(item => item._id === newMarket._id ? response.data : item));  // Use _id for matching
+          setNewMarket({ name: '', open: '', close: '', days: '', status: '' });
+          setIsEditing(false);
+          setIsModalOpen(false);
+        })
+        .catch(error => {
+          console.error('There was an error updating the market!', error.response ? error.response.data : error.message);
+        });
+    }
+  };
+  
+  
+  
+
+  // Delete market via API
+  const handleDeleteMarket = (id) => {
+    axios.delete(`http://localhost:5000/api/markets/${id}`)
+      .then(() => {
+        setTableData(tableData.filter((item) => item._id !== id));
+      })
+      .catch(error => {
+        console.error('There was an error deleting the market!', error);
+      });
   };
 
   return (
@@ -81,9 +160,8 @@ const List = () => {
       <div className="bg-white shadow-md rounded-lg">
         <div className="flex justify-between items-center mb-4 bg-[#17A2B8] p-6 rounded-lg">
           <h1 className="text-2xl font-bold">Market</h1>
-          {/* Add Market Button */}
           <button
-            onClick={toggleModal} // Add this line to toggle the modal on click
+            onClick={toggleModal}
             className="bg-green-500 text-white py-2 px-4 rounded-md flex items-center space-x-2"
           >
             <FaPlus className="text-lg" />
@@ -91,11 +169,11 @@ const List = () => {
           </button>
         </div>
 
-        {/* Modal for Add Market */}
+        {/* Modal for Add/Edit Market */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg w-96">
-              <h2 className="text-2xl font-bold mb-4">Add Market</h2>
+              <h2 className="text-2xl font-bold mb-4">{isEditing ? 'Edit Market' : 'Add Market'}</h2>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-600">Name</label>
                 <input
@@ -155,10 +233,10 @@ const List = () => {
               </div>
               <div className="flex justify-end">
                 <button
-                  onClick={handleAddMarket}
+                  onClick={isEditing ? handleUpdateMarket : handleAddMarket}
                   className="bg-green-500 text-white py-2 px-4 rounded-md mr-2"
                 >
-                  Add Market
+                  {isEditing ? 'Update Market' : 'Add Market'}
                 </button>
                 <button
                   onClick={toggleModal}
@@ -177,58 +255,73 @@ const List = () => {
             onClick={toggleDropdown}
             className="bg-blue-500 text-white py-2 px-4 mb-2 ml-2 rounded-md flex items-center space-x-2"
           >
-            <FaDownload className="text-lg " />
+            <FaDownload className="text-lg" />
             <span>Export</span>
           </button>
 
           {isDropdownOpen && (
             <div className="absolute mt-2 bg-white border border-gray-300 rounded-lg shadow-lg w-40">
-              <ul>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={exportToPDF}>
-                  PDF
+              <ul className="p-2">
+                <li>
+                  <button
+                    onClick={exportToExcel}
+                    className="block py-2 px-4 text-gray-800 hover:bg-gray-100 w-full"
+                  >
+                    Export to Excel
+                  </button>
                 </li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <CSVLink data={tableData} filename="tableData.csv">
-                    CSV
+                <li>
+                  <button
+                    onClick={exportToPDF}
+                    className="block py-2 px-4 text-gray-800 hover:bg-gray-100 w-full"
+                  >
+                    Export to PDF
+                  </button>
+                </li>
+                <li>
+                  <CSVLink data={tableData} filename="marketData.csv">
+                    <button className="block py-2 px-4 text-gray-800 hover:bg-gray-100 w-full">
+                      Export to CSV
+                    </button>
                   </CSVLink>
                 </li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={exportToExcel}>
-                  Excel
-                </li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Copy</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Print</li>
               </ul>
             </div>
           )}
         </div>
 
-        {/* Table */}
-        <table className="table-auto w-full border-collapse">
+        {/* Table Data */}
+        <table className="min-w-full bg-white border border-gray-300 rounded-md">
           <thead>
-            <tr className="bg-gray-100 text-gray-700">
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Sr no</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Name</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Open</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Close</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Status</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Action</th>
+            <tr>
+              <th className="py-2 px-4 text-left">Sr no</th>
+              <th className="py-2 px-4 text-left">Name</th>
+              <th className="py-2 px-4 text-left">Open</th>
+              <th className="py-2 px-4 text-left">Close</th>
+              <th className="py-2 px-4 text-left">Status</th>
+              <th className="py-2 px-4">Actions</th>
             </tr>
           </thead>
-
           <tbody>
             {tableData.map((item, index) => (
-              <tr key={item.id} className="bg-white text-gray-700">
-                <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{item.name}</td>
-                <td className="border px-4 py-2">{item.open}</td>
-                <td className="border px-4 py-2">{item.close}</td>
-                <td className="border px-4 py-2">{item.status}</td>
-                <td className="border px-4 py-2 flex space-x-2">
-                  <button className="text-blue-500 hover:text-blue-700">
-                    <FaEdit className="inline-block text-lg" />
+              <tr key={item.id}>
+                <td className="py-2 px-4">{index + 1}</td>
+                <td className="py-2 px-4">{item.name}</td>
+                <td className="py-2 px-4">{item.open}</td>
+                <td className="py-2 px-4">{item.close}</td>
+                <td className="py-2 px-4">{item.status}</td>
+                <td className="py-2 px-4 flex space-x-2">
+                  <button
+                    onClick={() => handleEditMarket(item._id)}
+                    className="bg-yellow-500 text-white p-2 rounded-md"
+                  >
+                    <FaEdit />
                   </button>
-                  <button className="text-red-500 hover:text-red-700">
-                    <FaTrashAlt className="inline-block text-lg" />
+                  <button
+                    onClick={() => handleDeleteMarket(item._id)}
+                    className="bg-red-500 text-white p-2 rounded-md"
+                  >
+                    <FaTrashAlt />
                   </button>
                 </td>
               </tr>
