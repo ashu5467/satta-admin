@@ -1,210 +1,366 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaDollarSign, FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const Users = () => {
-  // Sample data for the table
-  const usersData = [
-    { id: 1, name: 'John Doe', mobile: '1234567890', points: 150, canPlay: 'Yes', status: 'Active' },
-    { id: 2, name: 'Jane Smith', mobile: '0987654321', points: 200, canPlay: 'No', status: 'Inactive' },
-    { id: 3, name: 'Sam Wilson', mobile: '1122334455', points: 120, canPlay: 'Yes', status: 'Active' },
-    { id: 4, name: 'Chris Evans', mobile: '6677889900', points: 175, canPlay: 'Yes', status: 'Active' },
-  ];
-
-  // State for modals and selected user data
+  const [usersData, setUsersData] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isRateModalOpen, setIsRateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState({});
+  const [rateModalData, setRateModalData] = useState({
+    singleRate: '',
+    jodiRate: '',
+    spRate: '',
+    dpRate: '',
+    tpRate: '',
+    halfSangamRate: '',
+    fullSangamRate: ''
+  });
+  
+  const [searchFilters, setSearchFilters] = useState({
+    name: '',
+    mobile: '',
+    points: '',
+    canPlay: '',
+    status: '',
+  });
 
-  // Function to handle opening the user edit modal
-  const handleEdit = (user) => {
-    setSelectedUser(user);
-    setIsUserModalOpen(true);
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    filterUsers();
+  }, [usersData, searchFilters]);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/users');
+      if (!response.ok) throw new Error('Failed to fetch users');
+      const data = await response.json();
+      setUsersData(data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+  
+  const handleSaveUser = async (e) => {
+    e.preventDefault();
+    // Ensure canPlay is 'Yes' or 'No'
+    if (selectedUser.canPlay !== 'Yes' && selectedUser.canPlay !== 'No') {
+      alert("Can Play must be 'Yes' or 'No'");
+      return;
+    }
+
+    try {
+      const method = selectedUser._id ? 'PUT' : 'POST';
+      const url = selectedUser._id
+        ? `http://localhost:5000/api/users/${selectedUser._id}`
+        : 'http://localhost:5000/api/users';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedUser),
+      });
+
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Failed to save user');
+      }
+
+      fetchUsers();
+      closeModal();
+    } catch (error) {
+      console.error('Error saving user:', error.message);
+      alert(error.message);
+    }
   };
 
-  // Function to handle opening the rate edit modal
   const handleRateEdit = (user) => {
-    setSelectedUser(user);
+    setSelectedUser({ ...user });
+    setRateModalData({
+      singleRate: user.singleRate || '',
+      jodiRate: user.jodiRate || '',
+      spRate: user.spRate || '',
+      dpRate: user.dpRate || '',
+      tpRate: user.tpRate || '',
+      halfSangamRate: user.halfSangamRate || '',
+      fullSangamRate: user.fullSangamRate || ''
+    });
     setIsRateModalOpen(true);
   };
 
-  // Function to handle opening the delete confirmation modal
-  const handleDelete = (user) => {
-    setSelectedUser(user);
-    setIsDeleteModalOpen(true);
+  const handleDeleteUser = async () => {
+    try {
+      await fetch(`http://localhost:5000/api/users/${selectedUser._id}`, {
+        method: 'DELETE',
+      });
+      fetchUsers();
+      closeModal();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
   };
 
-  // Function to handle closing all modals
   const closeModal = () => {
     setIsUserModalOpen(false);
     setIsRateModalOpen(false);
     setIsDeleteModalOpen(false);
-    setSelectedUser(null);
+    setSelectedUser({});
+    setRateModalData({
+      singleRate: '',
+      jodiRate: '',
+      spRate: '',
+      dpRate: '',
+      tpRate: '',
+      halfSangamRate: '',
+      fullSangamRate: ''
+    });
   };
 
-  // Function to handle saving the user data (Add/Edit)
-  const handleSaveUser = (e) => {
-    e.preventDefault();
-    console.log("User data saved:", selectedUser);
-    closeModal();
+  const handleRateChange = (e) => {
+    const { name, value } = e.target;
+    setRateModalData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  // Function to handle saving the rate data
-  const handleSaveRates = (e) => {
-    e.preventDefault();
-    console.log("Rate data saved:", selectedUser);
-    closeModal();
+  const handleSaveRates = async () => {
+    const updatedUser = { ...selectedUser, ...rateModalData };
+    try {
+      const response = await fetch(`http://localhost:5000/api/users/${selectedUser._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedUser),
+      });
+
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Failed to update rates');
+      }
+
+      fetchUsers();
+      closeModal();
+    } catch (error) {
+      console.error('Error saving rates:', error);
+      alert(error.message);
+    }
   };
 
-  // Function to handle user deletion
-  const handleDeleteUser = () => {
-    console.log("User deleted:", selectedUser);
-    closeModal();
+  const handleAddUser = () => {
+    setSelectedUser({});
+    setIsUserModalOpen(true);
   };
+
+  const handleEdit = (user) => {
+    setSelectedUser({ ...user });
+    setIsUserModalOpen(true);
+  };
+
+  const handleDelete = (user) => {
+    setSelectedUser({ ...user });
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleSearchChange = (e) => {
+    const { name, value } = e.target;
+    setSearchFilters((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+
+
+
+
+  
+  const filterUsers = () => {
+    const filtered = usersData.filter(user => {
+      return (
+        user.name.toLowerCase().includes(searchFilters.name.toLowerCase()) &&
+        user.mobile.toLowerCase().includes(searchFilters.mobile.toLowerCase()) &&
+        (searchFilters.points === '' || (user.points || '').toString().includes(searchFilters.points)) &&
+        (searchFilters.canPlay === '' || user.canPlay.toLowerCase() === searchFilters.canPlay.toLowerCase()) &&
+        user.status.toLowerCase().includes(searchFilters.status.toLowerCase())
+      );
+    });
+    setFilteredUsers(filtered);
+  };
+  
+
+
+
+
+
+
 
   return (
     <div className="p-6 space-y-6">
-      <h3 className="text-xl font-semibold text-gray-700 mb-4">Users</h3>
-      
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-xl font-semibold text-gray-700">Users</h3>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          onClick={handleAddUser}
+        >
+          Add User
+        </button>
+      </div>
       <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="mb-4 flex space-x-4">
+          
+        </div>
         <table className="min-w-full bg-white border-collapse">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Sr No</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Name</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Mobile</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Points</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Can Play</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Status</th>
-              <th className="py-2 px-4 text-left text-gray-600 font-semibold border border-gray-300">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {usersData.map((user, index) => (
-              <tr key={user.id} className="border-t border-gray-300">
-                <td className="py-2 px-4 text-gray-700 border border-gray-300">{index + 1}</td>
-                <td className="py-2 px-4 text-gray-700 border border-gray-300">{user.name}</td>
-                <td className="py-2 px-4 text-gray-700 border border-gray-300">{user.mobile}</td>
-                <td className="py-2 px-4 text-gray-700 border border-gray-300">{user.points}</td>
-                <td className="py-2 px-4 text-gray-700 border border-gray-300">{user.canPlay}</td>
-                <td className="py-2 px-4 text-gray-700 border border-gray-300">{user.status}</td>
-                <td className="py-2 px-4 text-gray-700 border border-gray-300">
-                  <div className="flex justify-start space-x-2">
-                    <button
-                      className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600"
-                      onClick={() => handleEdit(user)}  // Open the user edit modal
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600"
-                      onClick={() => handleRateEdit(user)}  // Open the rate edit modal
-                    >
-                      <FaDollarSign />
-                    </button>
-                    <button
-                      className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
-                      onClick={() => handleDelete(user)}  // Open the delete confirmation modal
-                    >
-                      <FaTrashAlt />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  <thead>
+    <tr>
+      <th className="py-2 px-4 text-left text-gray-600 font-semibold border">Sr No</th>
+      <th className="py-2 px-4 text-left text-gray-600 font-semibold border">Name</th>
+      <th className="py-2 px-4 text-left text-gray-600 font-semibold border">Mobile</th>
+      <th className="py-2 px-4 text-left text-gray-600 font-semibold border">Points</th>
+      <th className="py-2 px-4 text-left text-gray-600 font-semibold border">Can Play</th>
+      <th className="py-2 px-4 text-left text-gray-600 font-semibold border">Status</th>
+      <th className="py-2 px-4 text-left text-gray-600 font-semibold border">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>
+        <input
+          type="text"
+          name="name"
+          placeholder="Search Name"
+          value={searchFilters.name}
+          onChange={handleSearchChange}
+          className="p-2 border rounded w-full"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          name="mobile"
+          placeholder="Search Mobile"
+          value={searchFilters.mobile}
+          onChange={handleSearchChange}
+          className="p-2 border rounded w-full"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          name="points"
+          placeholder="Search Points"
+          value={searchFilters.points}
+          onChange={handleSearchChange}
+          className="p-2 border rounded w-full"
+        />
+      </td>
+      <td>
+        <select
+          name="canPlay"
+          value={searchFilters.canPlay}
+          onChange={handleSearchChange}
+          className="p-2 border rounded w-full"
+        >
+          <option value="">All</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </td>
+      <td>
+        <input
+          type="text"
+          name="status"
+          placeholder="Search Status"
+          value={searchFilters.status}
+          onChange={handleSearchChange}
+          className="p-2 border rounded w-full"
+        />
+      </td>
+      <td />
+    </tr>
+    {filteredUsers.length > 0 ? (
+      filteredUsers.map((user, index) => (
+        <tr key={user._id} className="border-t border-gray-300">
+          <td className="py-2 px-4 border">{index + 1}</td>
+          <td className="py-2 px-4 border">{user.name}</td>
+          <td className="py-2 px-4 border">{user.mobile}</td>
+          <td className="py-2 px-4 border">{user.points || 'N/A'}</td>
+          <td className="py-2 px-4 border">{user.canPlay === 'Yes' ? 'Yes' : 'No'}</td>
+          <td className="py-2 px-4 border">{user.status}</td>
+          <td className="py-2 px-4 border">
+            <div className="flex space-x-2">
+              <button className="bg-green-500 text-white p-2 rounded-full" onClick={() => handleEdit(user)}>
+                <FaEdit />
+              </button>
+              <button className="bg-yellow-500 text-white p-2 rounded-full" onClick={() => handleRateEdit(user)}>
+                <FaDollarSign />
+              </button>
+              <button className="bg-red-500 text-white p-2 rounded-full" onClick={() => handleDelete(user)}>
+                <FaTrashAlt />
+              </button>
+            </div>
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="7" className="py-2 px-4 text-center text-gray-600">
+          No users found
+        </td>
+      </tr>
+    )}
+  </tbody>
+</table>
+
       </div>
 
-      {/* User Edit Modal */}
-      {isUserModalOpen && selectedUser && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-lg">
-            <h2 className="text-xl font-semibold mb-4">Add/Edit User</h2>
+      {/* User Modal */}
+      {isUserModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+            <h4 className="text-xl font-semibold text-gray-700 mb-4">{selectedUser._id ? 'Edit' : 'Add'} User</h4>
             <form onSubmit={handleSaveUser}>
-              <div className="space-y-4">
-                {/* Name */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Name</label>
-                  <input
-                    type="text"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={selectedUser.name}
-                    onChange={(e) => setSelectedUser({ ...selectedUser, name: e.target.value })}
-                  />
-                </div>
-
-                {/* Mobile */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Mobile</label>
-                  <input
-                    type="text"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={selectedUser.mobile}
-                    onChange={(e) => setSelectedUser({ ...selectedUser, mobile: e.target.value })}
-                  />
-                </div>
-
-                {/* Status */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Status</label>
-                  <select
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={selectedUser.status}
-                    onChange={(e) => setSelectedUser({ ...selectedUser, status: e.target.value })}
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                </div>
-
-                {/* Can Play */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Can Play</label>
-                  <select
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    value={selectedUser.canPlay}
-                    onChange={(e) => setSelectedUser({ ...selectedUser, canPlay: e.target.value })}
-                  >
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-
-                {/* Password */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Password</label>
-                  <input
-                    type="password"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    placeholder="Enter password"
-                  />
-                </div>
-
-                {/* Confirm Password */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
-                  <input
-                    type="password"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    placeholder="Confirm password"
-                  />
-                </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600">Name</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded"
+                  value={selectedUser.name || ''}
+                  onChange={(e) => setSelectedUser({ ...selectedUser, name: e.target.value })}
+                  required
+                />
               </div>
-
-              <div className="flex justify-end mt-4 space-x-2">
-                <button
-                  type="button"
-                  className="bg-gray-500 text-white px-4 py-2 rounded-md"
-                  onClick={closeModal}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600">Mobile</label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded"
+                  value={selectedUser.mobile || ''}
+                  onChange={(e) => setSelectedUser({ ...selectedUser, mobile: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600">Can Play</label>
+                <select
+                  className="w-full p-2 border rounded"
+                  value={selectedUser.canPlay || 'No'}
+                  onChange={(e) => setSelectedUser({ ...selectedUser, canPlay: e.target.value })}
                 >
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div className="mb-4 flex justify-end space-x-2">
+                <button type="button" className="bg-gray-300 text-white p-2 rounded-md" onClick={closeModal}>
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                >
-                  Save User
+                <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">
+                  Save
                 </button>
               </div>
             </form>
@@ -212,151 +368,50 @@ const Users = () => {
         </div>
       )}
 
-      {/* Rate Edit Modal */}
-      {isRateModalOpen && selectedUser && (
-   <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50 overflow-auto">
-   <div className="bg-white p-6 rounded-lg w-[90%] max-w-[800px]">
-     <h2 className="text-xl font-semibold mb-4">Edit Rate</h2>
-     <form onSubmit={handleSaveRates}>
-       <div className="space-y-4">
-         {/* Name */}
-         <div>
-           <label className="block text-sm font-medium text-gray-700">Name</label>
-           <input
-             type="text"
-             className="w-full h-8 p-2 border border-gray-300 rounded-md"
-             value={selectedUser.name || ''}
-             disabled
-           />
-         </div>
- 
-         {/* Single Rate */}
-         <div>
-           <label className="block text-sm font-medium text-gray-700">Single Rate</label>
-           <input
-             type="number"
-             step="0.01"
-             className="w-full h-8 p-2 border border-gray-300 rounded-md"
-             value={selectedUser.singleRate || ''}
-             onChange={(e) => setSelectedUser({ ...selectedUser, singleRate: e.target.value })}
-           />
-         </div>
- 
-         {/* Jodi Rate */}
-         <div>
-           <label className="block text-sm font-medium text-gray-700">Jodi Rate</label>
-           <input
-             type="number"
-             step="0.01"
-             className="w-full h-8 p-2 border border-gray-300 rounded-md"
-             value={selectedUser.jodiRate || ''}
-             onChange={(e) => setSelectedUser({ ...selectedUser, jodiRate: e.target.value })}
-           />
-         </div>
- 
-         {/* SP Rate */}
-         <div>
-           <label className="block text-sm font-medium text-gray-700">SP Rate</label>
-           <input
-             type="number"
-             step="0.01"
-             className="w-full h-8 p-2 border border-gray-300 rounded-md"
-             value={selectedUser.spRate || ''}
-             onChange={(e) => setSelectedUser({ ...selectedUser, spRate: e.target.value })}
-           />
-         </div>
- 
-         {/* DP Rate */}
-         <div>
-           <label className="block text-sm font-medium text-gray-700">DP Rate</label>
-           <input
-             type="number"
-             step="0.01"
-             className="w-full h-8 p-2 border border-gray-300 rounded-md"
-             value={selectedUser.dpRate || ''}
-             onChange={(e) => setSelectedUser({ ...selectedUser, dpRate: e.target.value })}
-           />
-         </div>
- 
-         {/* TP Rate */}
-         <div>
-           <label className="block text-sm font-medium text-gray-700">TP Rate</label>
-           <input
-             type="number"
-             step="0.01"
-             className="w-full h-8 p-2 border border-gray-300 rounded-md"
-             value={selectedUser.tpRate || ''}
-             onChange={(e) => setSelectedUser({ ...selectedUser, tpRate: e.target.value })}
-           />
-         </div>
- 
-         {/* Half Sangam Rate */}
-         <div>
-           <label className="block text-sm font-medium text-gray-700">Half Sangam Rate</label>
-           <input
-             type="number"
-             step="0.01"
-             className="w-full h-8 p-2 border border-gray-300 rounded-md"
-             value={selectedUser.halfSangamRate || ''}
-             onChange={(e) => setSelectedUser({ ...selectedUser, halfSangamRate: e.target.value })}
-           />
-         </div>
- 
-         {/* Full Sangam Rate */}
-         <div>
-           <label className="block text-sm font-medium text-gray-700">Full Sangam Rate</label>
-           <input
-             type="number"
-             step="0.01"
-             className="w-full h-8 p-2 border border-gray-300 rounded-md"
-             value={selectedUser.fullSangamRate || ''}
-             onChange={(e) => setSelectedUser({ ...selectedUser, fullSangamRate: e.target.value })}
-           />
-         </div>
-       </div>
- 
-       <div className="flex justify-end mt-4 space-x-2">
-         <button
-           type="button"
-           className="bg-gray-500 text-white px-6 py-2 rounded-md"
-           onClick={closeModal}
-         >
-           Cancel
-         </button>
-         <button
-           type="submit"
-           className="bg-blue-500 text-white px-6 py-2 rounded-md"
-         >
-           Save Rates
-         </button>
-       </div>
-     </form>
-   </div>
- </div>
- 
-
-      )}
-
       {/* Delete Confirmation Modal */}
-      {isDeleteModalOpen && selectedUser && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-lg">
-            <h2 className="text-xl font-semibold mb-4">Are you sure?</h2>
-            <p className="text-sm text-gray-700 mb-4">Do you really want to delete user {selectedUser.name}?</p>
-            <div className="flex justify-end space-x-4">
-              <button
-                className="bg-gray-500 text-white px-4 py-2 rounded-md"
-                onClick={closeModal}
-              >
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+            <h4 className="text-xl font-semibold text-gray-700 mb-4">Are you sure you want to delete this user?</h4>
+            <div className="flex justify-end space-x-2">
+              <button className="bg-gray-300 text-white p-2 rounded-md" onClick={closeModal}>
                 Cancel
               </button>
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded-md"
-                onClick={handleDeleteUser}
-              >
+              <button className="bg-red-500 text-white p-2 rounded-md" onClick={handleDeleteUser}>
                 Delete
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rate Modal */}
+      {isRateModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+            <h4 className="text-xl font-semibold text-gray-700 mb-4">Edit Rates for {selectedUser.name}</h4>
+            <form onSubmit={(e) => e.preventDefault()}>
+              {['singleRate', 'jodiRate', 'spRate', 'dpRate', 'tpRate', 'halfSangamRate', 'fullSangamRate'].map((rateField) => (
+                <div className="mb-4" key={rateField}>
+                  <label className="block text-sm font-medium text-gray-600">{rateField.replace(/([A-Z])/g, ' $1').toUpperCase()}</label>
+                  <input
+                    type="number"
+                    name={rateField}
+                    className="w-full p-2 border rounded"
+                    value={rateModalData[rateField] || ''}
+                    onChange={handleRateChange}
+                  />
+                </div>
+              ))}
+              <div className="mb-4 flex justify-end space-x-2">
+                <button type="button" className="bg-gray-300 text-white p-2 rounded-md" onClick={closeModal}>
+                  Cancel
+                </button>
+                <button type="button" className="bg-blue-500 text-white p-2 rounded-md" onClick={handleSaveRates}>
+                  Save
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

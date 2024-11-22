@@ -19,6 +19,10 @@ import List from "./pages/List";
 import Bids from "./pages/Bids";
 import Results from "./pages/Results";
 import RegisterPage from "./pages/RegisterPage";
+import DefaultMethod from "./pages/DefaultMethod";
+import PaymentUpi from "./pages/PaymentUpi";
+import WithdrawalTime from "./pages/WithdrawalTime";
+import RechargeAmount from "./pages/RechargeAmount";
 
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -85,6 +89,10 @@ function App() {
                     <Route path="/main-market/list" element={<List />} />
                     <Route path="/main-market/bids" element={<Bids />} />
                     <Route path="/main-market/results" element={<Results />} />
+                    <Route path="/payment-settings/default-method" element={<DefaultMethod />} />
+                    <Route path="/payment-settings/recharge-amount" element={<RechargeAmount />} />
+                    <Route path="/payment-settings/withdrawal-time" element={<WithdrawalTime />} />
+                    <Route path="/payment-settings/payment-upi" element={<PaymentUpi />} />
                   </>
                 ) : (
                   <Route path="*" element={<Navigate to="/" />} />

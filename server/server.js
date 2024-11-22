@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 const marketRoutes = require('./routes/marketRoutes');
 const resultRoutes = require('./routes/resultRoutes');
 const bannerRoutes = require('./routes/bannerRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -20,6 +21,7 @@ connectDB();
 app.use('/api', marketRoutes);
 app.use('/api/results', resultRoutes);
 app.use('/api/banner', bannerRoutes);
+app.use('/api/users', userRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

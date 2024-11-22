@@ -100,24 +100,6 @@ const List = () => {
     }
   };
   
-  // Update market data via API
-  // const handleUpdateMarket = () => {
-  //   if (newMarket.name && newMarket.open && newMarket.close && newMarket.status) {
-  //     axios.put(
-  //       `http://localhost:5000/api/markets/${newMarket.id}`, 
-  //       newMarket, 
-  //       { headers: { 'Content-Type': 'application/json' } }
-  //     )
-  //       .then(response => {
-  //         setTableData(tableData.map(item => item.id === newMarket.id ? response.data : item));
-  //         setNewMarket({ name: '', open: '', close: '', days: '', status: '' });
-  //         setIsEditing(false);
-  //         setIsModalOpen(false);
-  //       })
-  //       .catch(error => {
-  //         console.error('There was an error updating the market!', error);
-  //       });
-  //   }
   const handleUpdateMarket = () => {
     if (!newMarket._id) {  // Check for _id instead of id
       console.error('Market ID is missing!');

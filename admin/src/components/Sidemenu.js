@@ -1,17 +1,36 @@
-// src/components/Sidemenu.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaTachometerAlt, FaUser, FaMoneyBillWave, FaChartBar, FaImage, FaCog, FaStore, FaBell, FaTrashAlt, FaBusinessTime, FaFileAlt, FaAngleDown, FaAngleUp, FaList, FaClipboardList, FaRegChartBar  } from 'react-icons/fa';
-
-//import { FaTachometerAlt, FaUser, FaMoneyBillWave, FaChartBar, FaImage, FaCog, FaStore, FaBell, FaTrashAlt, FaBusinessTime, FaFileAlt, FaAngleDown, FaAngleUp, FaList, FaClipboardList, FaBidding } from 'react-icons/fa';
+import {
+  FaTachometerAlt,
+  FaUser,
+  FaMoneyBillWave,
+  FaChartBar,
+  FaImage,
+  FaCog,
+  FaStore,
+  FaBell,
+  FaTrashAlt,
+  FaBusinessTime,
+  FaFileAlt,
+  FaAngleDown,
+  FaAngleUp,
+  FaList,
+  FaClipboardList,
+  FaRegChartBar,
+} from 'react-icons/fa';
 
 const Sidemenu = ({ isOpen }) => {
   // State to manage the submenu open/close
   const [isMainMarketOpen, setIsMainMarketOpen] = useState(false);
+  const [isPaymentSettingsOpen, setIsPaymentSettingsOpen] = useState(false);
 
   // Toggle submenu visibility
   const toggleMainMarketSubMenu = () => {
     setIsMainMarketOpen(!isMainMarketOpen);
+  };
+
+  const togglePaymentSettingsSubMenu = () => {
+    setIsPaymentSettingsOpen(!isPaymentSettingsOpen);
   };
 
   return (
@@ -52,14 +71,54 @@ const Sidemenu = ({ isOpen }) => {
             <span>Main Banner</span>
           </Link>
         </li>
+
+        {/* Payment Settings */}
         <li>
-          <Link to="/payment-settings" className="flex items-center space-x-4 hover:text-gray-400">
+          <div
+            className="flex items-center space-x-4 cursor-pointer hover:text-gray-400"
+            onClick={togglePaymentSettingsSubMenu}
+          >
             <FaCog />
             <span>Payment Settings</span>
-          </Link>
+            {isPaymentSettingsOpen ? <FaAngleUp /> : <FaAngleDown />}
+          </div>
+          {/* Submenu for Payment Settings */}
+          {isPaymentSettingsOpen && (
+            <ul className="space-y-4 ml-6 mt-2">
+              <li>
+                <Link to="/payment-settings/default-method" className="flex items-center space-x-4 hover:text-gray-400">
+                  <FaList />
+                  <span>Default Method</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/payment-settings/recharge-amount" className="flex items-center space-x-4 hover:text-gray-400">
+                  <FaRegChartBar />
+                  <span>Recharge Amount</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/payment-settings/withdrawal-time" className="flex items-center space-x-4 hover:text-gray-400">
+                  <FaClipboardList />
+                  <span>Withdrawal Time</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/payment-settings/payment-upi" className="flex items-center space-x-4 hover:text-gray-400">
+                  <FaMoneyBillWave />
+                  <span>Payment UPI</span>
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
+
+        {/* Main Market */}
         <li>
-          <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400" onClick={toggleMainMarketSubMenu}>
+          <div
+            className="flex items-center space-x-4 cursor-pointer hover:text-gray-400"
+            onClick={toggleMainMarketSubMenu}
+          >
             <FaStore />
             <span>Main Market</span>
             {isMainMarketOpen ? <FaAngleUp /> : <FaAngleDown />}
@@ -75,7 +134,7 @@ const Sidemenu = ({ isOpen }) => {
               </li>
               <li>
                 <Link to="/main-market/bids" className="flex items-center space-x-4 hover:text-gray-400">
-                  <FaRegChartBar  />
+                  <FaRegChartBar />
                   <span>Bids</span>
                 </Link>
               </li>
