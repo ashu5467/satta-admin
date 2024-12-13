@@ -1,28 +1,125 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import LearnMatka from './pages/LearnMatka';
-import AboutMatka from './pages/AboutMatka';
-import GuessMatka from './pages/GuessMatka';
-import JodiChart from './components/JodiChart';
-import PanelChart from './components/PanelChart ';
-import ChartPage from './components/ChartPage';
+import React, { useState } from "react";
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
+import HomePage from "./pages/Homepage";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import MyProfile from "./pages/Myprofile";
+import Statements from "./pages/Statements";
+import Withdraw from "./pages/Withdraw";
+import Gamerates from "./pages/Gamerates";
+import Notifications from "./pages/Notifications";
+import Share from "./pages/Share";
+import ChartPage from "./pages/ChartPage";
+import PlayPage from "./pages/PlayPage";
+import PlayOpenPage from "./pages/PlayOpenPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import ConfirmationPage from "./pages/ConfirmationPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
-const App = () => {
+function App() {
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
+  const walletAmount = 150.0;
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleLogin = () => {
+    // Change authentication status
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken"); // Clear the token from localStorage
+    setIsAuthenticated(false); // Update the authentication state to false
+  };
+
+
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} /> {/* Ensure HomePage is set here */}
-        <Route path="/learn-matka" element={<LearnMatka />} />
-        <Route path="/about-matka" element={<AboutMatka />} />
-        <Route path="/guess-matka" element={<GuessMatka />} />
-        <Route path="/jodi-chart" element={<JodiChart />} />
-        <Route path="/panel-chart" element={<PanelChart />} />
+      <div className="flex h-screen">
+        {isAuthenticated && (
+          <>
+            <div
+              className={`fixed inset-y-0 left-0 bg-amber-50 text-gray-800 z-20 w-64 transform ${
+                isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+              } transition-transform duration-300 ease-in-out md:translate-x-0 md:static`}
+            >
+             <Sidebar onLogout={handleLogout} /> {/* Pass handleLogout to Sidebar */}
+            </div>
 
-        <Route path="/chart/:chartName" element={<ChartPage />} />
-      </Routes>
+            {isSidebarOpen && (
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50 z-10 md:hidden"
+                onClick={() => setSidebarOpen(false)}
+              />
+            )}
+          </>
+        )}
+
+        <div className="flex flex-col flex-grow">
+          {isAuthenticated && <Header walletAmount={walletAmount} onMenuClick={toggleSidebar} />}
+          <div className="flex-grow overflow-auto">
+            <Routes>
+              <Route
+                path="/login"
+                element={isAuthenticated ? <Navigate to="/" /> : <LoginPage onLogin={handleLogin} />}
+              />
+              <Route
+                path="/signup"
+                element={isAuthenticated ? <Navigate to="/" /> : <SignupPage />}
+              />
+
+              <Route
+                path="/"
+                element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/my-profile"
+                element={isAuthenticated ? <MyProfile /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/statements"
+                element={isAuthenticated ? <Statements /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/withdraw-requests"
+                element={isAuthenticated ? <Withdraw /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/game-rates"
+                element={isAuthenticated ? <Gamerates /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/notifications"
+                element={isAuthenticated ? <Notifications /> : <Navigate to="/login" />}
+              />
+              <Route path="/share" element={isAuthenticated ? <Share /> : <Navigate to="/login" />} />
+              <Route
+                path="/chart"
+                element={isAuthenticated ? <ChartPage /> : <Navigate to="/login" />}
+              />
+              <Route path="/play" element={isAuthenticated ? <PlayPage /> : <Navigate to="/login" />} />
+              <Route
+                path="/play-open"
+                element={isAuthenticated ? <PlayOpenPage /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/checkout"
+                element={isAuthenticated ? <CheckoutPage /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/confirmation"
+                element={isAuthenticated ? <ConfirmationPage /> : <Navigate to="/login" />}
+              />
+            </Routes>
+          </div>
+        </div>
+      </div>
     </Router>
   );
-};
+}
 
 export default App;

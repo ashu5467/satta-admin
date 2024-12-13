@@ -7,6 +7,7 @@ const marketRoutes = require('./routes/marketRoutes');
 const resultRoutes = require('./routes/resultRoutes');
 const bannerRoutes = require('./routes/bannerRoutes');
 const userRoutes = require('./routes/userRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/api', marketRoutes);
 app.use('/api/results', resultRoutes);
 app.use('/api/banner', bannerRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

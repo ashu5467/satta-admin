@@ -23,6 +23,8 @@ import DefaultMethod from "./pages/DefaultMethod";
 import PaymentUpi from "./pages/PaymentUpi";
 import WithdrawalTime from "./pages/WithdrawalTime";
 import RechargeAmount from "./pages/RechargeAmount";
+import BidReports from "./pages/BidReports";
+import PointsReports from "./pages/PointReports";
 
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -93,6 +95,8 @@ function App() {
                     <Route path="/payment-settings/recharge-amount" element={<RechargeAmount />} />
                     <Route path="/payment-settings/withdrawal-time" element={<WithdrawalTime />} />
                     <Route path="/payment-settings/payment-upi" element={<PaymentUpi />} />
+                    <Route path="/reports/bids" element={<BidReports />} />
+                    <Route path="/reports/points" element={<PointsReports />} />
                   </>
                 ) : (
                   <Route path="*" element={<Navigate to="/" />} />

@@ -23,6 +23,7 @@ const Sidemenu = ({ isOpen }) => {
   // State to manage the submenu open/close
   const [isMainMarketOpen, setIsMainMarketOpen] = useState(false);
   const [isPaymentSettingsOpen, setIsPaymentSettingsOpen] = useState(false);
+  const [isReportsOpen, setIsReportsOpen] = useState(false); // State for Reports submenu
 
   // Toggle submenu visibility
   const toggleMainMarketSubMenu = () => {
@@ -33,11 +34,15 @@ const Sidemenu = ({ isOpen }) => {
     setIsPaymentSettingsOpen(!isPaymentSettingsOpen);
   };
 
+  const toggleReportsSubMenu = () => {
+    setIsReportsOpen(!isReportsOpen); // Toggle Reports submenu visibility
+  };
+
   return (
     <nav
       className={`bg-gray-800 text-white w-64 p-6 fixed top-0 left-0 h-screen transform transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
-      } z-30`}
+      } z-30 overflow-y-auto`} // Ensures sidebar is scrollable if content is too long
     >
       <div className="text-2xl font-bold mb-8">MatkaApp</div>
       <ul className="space-y-6">
@@ -70,6 +75,41 @@ const Sidemenu = ({ isOpen }) => {
             <FaImage />
             <span>Main Banner</span>
           </Link>
+        </li>
+
+        {/* Main Market */}
+        <li>
+          <div
+            className="flex items-center space-x-4 cursor-pointer hover:text-gray-400"
+            onClick={toggleMainMarketSubMenu}
+          >
+            <FaStore />
+            <span>Main Market</span>
+            {isMainMarketOpen ? <FaAngleUp /> : <FaAngleDown />}
+          </div>
+          {/* Submenu for Main Market */}
+          {isMainMarketOpen && (
+            <ul className="space-y-4 ml-6 mt-2">
+              <li>
+                <Link to="/main-market/list" className="flex items-center space-x-4 hover:text-gray-400">
+                  <FaList />
+                  <span>List</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/main-market/bids" className="flex items-center space-x-4 hover:text-gray-400">
+                  <FaRegChartBar />
+                  <span>Bids</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/main-market/results" className="flex items-center space-x-4 hover:text-gray-400">
+                  <FaClipboardList />
+                  <span>Results</span>
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
 
         {/* Payment Settings */}
@@ -113,40 +153,6 @@ const Sidemenu = ({ isOpen }) => {
           )}
         </li>
 
-        {/* Main Market */}
-        <li>
-          <div
-            className="flex items-center space-x-4 cursor-pointer hover:text-gray-400"
-            onClick={toggleMainMarketSubMenu}
-          >
-            <FaStore />
-            <span>Main Market</span>
-            {isMainMarketOpen ? <FaAngleUp /> : <FaAngleDown />}
-          </div>
-          {/* Submenu for Main Market */}
-          {isMainMarketOpen && (
-            <ul className="space-y-4 ml-6 mt-2">
-              <li>
-                <Link to="/main-market/list" className="flex items-center space-x-4 hover:text-gray-400">
-                  <FaList />
-                  <span>List</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/main-market/bids" className="flex items-center space-x-4 hover:text-gray-400">
-                  <FaRegChartBar />
-                  <span>Bids</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/main-market/results" className="flex items-center space-x-4 hover:text-gray-400">
-                  <FaClipboardList />
-                  <span>Results</span>
-                </Link>
-              </li>
-            </ul>
-          )}
-        </li>
         <li>
           <Link to="/notifications" className="flex items-center space-x-4 hover:text-gray-400">
             <FaBell />
@@ -165,11 +171,34 @@ const Sidemenu = ({ isOpen }) => {
             <span>Check Business</span>
           </Link>
         </li>
+
+        {/* Reports */}
         <li>
-          <Link to="/reports" className="flex items-center space-x-4 hover:text-gray-400">
+          <div
+            className="flex items-center space-x-4 cursor-pointer hover:text-gray-400"
+            onClick={toggleReportsSubMenu}
+          >
             <FaFileAlt />
             <span>Reports</span>
-          </Link>
+            {isReportsOpen ? <FaAngleUp /> : <FaAngleDown />}
+          </div>
+          {/* Submenu for Reports */}
+          {isReportsOpen && (
+            <ul className="space-y-4 ml-6 mt-2">
+              <li>
+                <Link to="/reports/bids" className="flex items-center space-x-4 hover:text-gray-400">
+                  <FaList />
+                  <span>Bids</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/reports/points" className="flex items-center space-x-4 hover:text-gray-400">
+                  <FaRegChartBar />
+                  <span>Points</span>
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
       </ul>
     </nav>

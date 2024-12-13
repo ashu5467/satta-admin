@@ -1,4 +1,30 @@
-/* src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Ensure Segoe UI is applied globally */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Apply Segoe UI globally */
+  -webkit-font-smoothing: antialiased; /* Smoother font rendering */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, textarea {
+  font-family: inherit; /* Ensure Segoe UI is inherited in form elements */
+}
+
+h1, h2, h3, h4, h5, h6, p, span, div, a {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Explicitly apply font to all text elements */
+}
+
+code {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Apply to code elements */
+}

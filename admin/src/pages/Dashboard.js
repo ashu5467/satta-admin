@@ -1,43 +1,31 @@
-// src/pages/Dashboard.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 
 const Dashboard = () => {
-  // Sample data for table rows
-  const marketData = [
-    {
-      market: 'Aarush Morning',
-      time: '10:00 AM - 11:30 PM',
-      result: '179-70-389',
-      date: '13/11/2024',
-    },
-    {
-      market: 'Market 2',
-      time: '12:00 PM - 1:30 PM',
-      result: '123-45-678',
-      date: '13/11/2024',
-    },
-    {
-      market: 'Market 3',
-      time: '2:00 PM - 3:30 PM',
-      result: '111-22-333',
-      date: '13/11/2024',
-    },
-    {
-      market: 'Market 4',
-      time: '4:00 PM - 5:30 PM',
-      result: '456-78-901',
-      date: '13/11/2024',
-    },
-  ];
-
-  // State to handle modal visibility and selected market data
+  // State to handle market data, modal visibility, and other inputs
+  const [marketData, setMarketData] = useState([]); // State for storing market data
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMarket, setSelectedMarket] = useState(null);
   const [resultDate, setResultDate] = useState('');
   const [openPatti, setOpenPatti] = useState('');
   const [jodi, setJodi] = useState('');
   const [closePatti, setClosePatti] = useState('');
+
+  // Fetch market data from API
+  useEffect(() => {
+    const fetchMarkets = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/markets');
+        const data = await response.json();
+        setMarketData(data); // Store the fetched market data
+      } catch (error) {
+        console.error('Error fetching market data:', error);
+      }
+    };
+
+    fetchMarkets();
+    console.log(marketData)
+  }, []);
 
   // Function to open the modal with selected market
   const openModal = (market) => {
@@ -55,20 +43,79 @@ const Dashboard = () => {
   const handleJodiChange = (e) => setJodi(e.target.value);
   const handleClosePattiChange = (e) => setClosePatti(e.target.value);
 
-  // Handle form submission
-  const handleFormSubmit = (e) => {
+ 
+
+  // const handleFormSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (openPatti && jodi && closePatti && resultDate) {
+  //     try {
+  //       const response = await fetch(`http://localhost:5000/api/markets/${selectedMarket._id}/result`, {
+  //         method: 'PUT',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           resultDate,
+  //           openPatti,
+  //           jodi,
+  //           closePatti,
+  //         }),
+  //       });
+  
+  //       if (!response.ok) {
+  //         throw new Error('Failed to update result');
+  //       }
+  
+  //       const updatedMarket = await response.json();
+  
+  //       // Update the market data in the frontend
+  //       setMarketData((prevData) =>
+  //         prevData.map((market) =>
+  //           market._id === updatedMarket._id ? updatedMarket : market
+  //         )
+  //       );
+  
+  //       alert('Result updated successfully!');
+  //       setIsModalOpen(false);
+  //     } catch (error) {
+  //       console.error('Error updating result:', error);
+  //       alert('Error updating result');
+  //     }
+  //   } else {
+  //     alert('Please fill in all fields.');
+  //   }
+  // };
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (openPatti && jodi && closePatti && resultDate) {
-      alert(`Result for ${selectedMarket.market} updated:\n
-      Date: ${resultDate}\n
-      Open Patti: ${openPatti}\n
-      Jodi: ${jodi}\n
-      Close Patti: ${closePatti}`);
-      setIsModalOpen(false);
+    const today = new Date().toISOString().split('T')[0];
+    if (openPatti && jodi && closePatti && resultDate === today) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/markets/${selectedMarket._id}/result`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resultDate, openPatti, jodi, closePatti }),
+        });
+        if (!response.ok) throw new Error('Failed to update result');
+  
+        const updatedMarket = await response.json();
+        setMarketData((prevData) =>
+          prevData.map((market) => (market._id === updatedMarket._id ? updatedMarket : market))
+        );
+  
+        alert('Result updated successfully!');
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error('Error updating result:', error);
+        alert('Error updating result');
+      }
     } else {
-      alert('Please fill in all fields.');
+      alert('Please ensure the result is for today.');
     }
   };
+  
+  
+  
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -117,101 +164,135 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {/* Dynamically generating table rows from the array */}
-                {marketData.map((data, index) => (
-                  <tr key={index} className="border-t border-gray-300">
-                    <td className="py-2 px-4 text-gray-700 border border-gray-300">{data.market}</td>
-                    <td className="py-2 px-4 text-gray-700 border border-gray-300">{data.time}</td>
-                    <td className="py-2 px-4 text-gray-700 border border-gray-300">{data.result}</td>
-                    <td className="py-2 px-4 border border-gray-300">
-                      <button
-                        className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 flex items-center"
-                        onClick={() => openModal(data)} // Open modal with selected market
-                      >
-                        Result
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+  {marketData.length > 0 ? (
+    marketData.map((data, index) => (
+      <tr key={index} className="border-t border-gray-300">
+        <td className="py-2 px-4 text-gray-700 border border-gray-300">{data.name}</td>
+        <td className="py-2 px-4 text-gray-700 border border-gray-300">
+          {data.openTime} - {data.closeTime}
+        </td>
+        <td className="py-2 px-4 text-gray-700 border border-gray-300">
+  {data.todayResult
+    ? `${data.todayResult.openPatti || 'N/A'} - ${data.todayResult.jodi || 'N/A'} - ${data.todayResult.closePatti || 'N/A'}`
+    : 'No Result'}
+</td>
+
+        <td className="py-2 px-4 border border-gray-300">
+          <button
+            className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 flex items-center"
+            onClick={() => openModal(data)} // Open modal with selected market
+          >
+            Result
+          </button>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="4" className="text-center text-gray-500">
+        No markets available
+      </td>
+    </tr>
+  )}
+</tbody>
+
+
             </table>
           </div>
         </section>
       </main>
 
-      {/* Modal for entering result */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg w-[600px]">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Enter Result for {selectedMarket.market} ({resultDate})</h3>
-            <form onSubmit={handleFormSubmit}>
-              <div className="mb-4">
-                <label htmlFor="resultDate" className="block text-sm font-medium text-gray-700">
-                  Result for Date
-                </label>
-                <input
-                  id="resultDate"
-                  type="date"
-                  value={resultDate}
-                  onChange={handleResultDateChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="openPatti" className="block text-sm font-medium text-gray-700">
-                  Open Patti
-                </label>
-                <input
-                  id="openPatti"
-                  type="number"
-                  value={openPatti}
-                  onChange={handleOpenPattiChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Enter Open Patti"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="jodi" className="block text-sm font-medium text-gray-700">
-                  Jodi
-                </label>
-                <input
-                  id="jodi"
-                  type="number"
-                  value={jodi}
-                  onChange={handleJodiChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Enter Jodi"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="closePatti" className="block text-sm font-medium text-gray-700">
-                  Close Patti
-                </label>
-                <input
-                  id="closePatti"
-                  type="number"
-                  value={closePatti}
-                  onChange={handleClosePattiChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Enter Close Patti"
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
-              >
-                Submit Result
-              </button>
-            </form>
-            <button
-              className="mt-4 text-sm text-gray-500 hover:text-gray-700"
-              onClick={() => setIsModalOpen(false)} // Close modal
-            >
-              Close
-            </button>
-          </div>
+     {/* Modal for entering result */}
+{isModalOpen && (
+  <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+    <div className="bg-white p-6 rounded-lg w-[600px]">
+      <h3 className="text-xl font-semibold text-gray-700 mb-4">
+        Enter Result for {selectedMarket?.name || 'Unknown Market'} ({resultDate})
+      </h3>
+      <form onSubmit={handleFormSubmit}>
+        <div className="mb-4">
+          <label htmlFor="resultDate" className="block text-sm font-medium text-gray-700">
+            Result for Date
+          </label>
+          <input
+            id="resultDate"
+            type="date"
+            value={resultDate}
+            onChange={handleResultDateChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          />
         </div>
-      )}
+        <div className="mb-4">
+  <label htmlFor="openPatti" className="block text-sm font-medium text-gray-700">
+    Open Patti
+  </label>
+  <input
+    id="openPatti"
+    type="text"
+    value={openPatti}
+    onChange={(e) => {
+      const value = e.target.value;
+      if (/^\d{0,3}$/.test(value)) {
+        setOpenPatti(value); // Allow up to 3 digits
+      }
+    }}
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+    placeholder="Enter 3-digit Open Patti"
+  />
+</div>
+<div className="mb-4">
+  <label htmlFor="jodi" className="block text-sm font-medium text-gray-700">
+    Jodi
+  </label>
+  <input
+    id="jodi"
+    type="text"
+    value={jodi}
+    onChange={(e) => {
+      const value = e.target.value;
+      if (/^\d{0,2}$/.test(value)) {
+        setJodi(value); // Allow up to 2 digits
+      }
+    }}
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+    placeholder="Enter 2-digit Jodi"
+  />
+</div>
+<div className="mb-4">
+  <label htmlFor="closePatti" className="block text-sm font-medium text-gray-700">
+    Close Patti
+  </label>
+  <input
+    id="closePatti"
+    type="text"
+    value={closePatti}
+    onChange={(e) => {
+      const value = e.target.value;
+      if (/^\d{0,3}$/.test(value)) {
+        setClosePatti(value); // Allow up to 2 digits
+      }
+    }}
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+    placeholder="Enter 3-digit Close Patti"
+  />
+</div>
+ <button
+          type="submit"
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+        >
+          Submit Result
+        </button>
+      </form>
+      <button
+        className="mt-4 text-sm text-gray-500 hover:text-gray-700"
+        onClick={() => setIsModalOpen(false)} // Close modal
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+ 
     </div>
   );
 };

@@ -7,10 +7,11 @@ import 'jspdf-autotable';
 import axios from 'axios';
 
 const List = () => {
+ 
   const [tableData, setTableData] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newMarket, setNewMarket] = useState({ name: '', open: '', close: '', days: '', status: '' });
+  const [newMarket, setNewMarket] = useState({ name: '', openTime: '', closeTime: '', days: '', status: '' });
   const [isEditing, setIsEditing] = useState(false);
 
   // Fetch markets data from API on component mount
@@ -66,6 +67,7 @@ const List = () => {
   // Add new market via API
   const handleAddMarket = () => {
     if (newMarket.name && newMarket.open && newMarket.close && newMarket.status) {
+      
       axios.post('http://localhost:5000/api/markets', newMarket)
         .then(response => {
           setTableData([...tableData, response.data]);
@@ -88,8 +90,8 @@ const List = () => {
       setNewMarket({
         _id: marketToEdit._id,  // Use _id instead of id
         name: marketToEdit.name,
-        open: marketToEdit.open,
-        close: marketToEdit.close,
+        open: marketToEdit.openTime,
+        close: marketToEdit.closeTime,
         days: marketToEdit.days,
         status: marketToEdit.status,
       });
@@ -289,8 +291,8 @@ const List = () => {
               <tr key={item.id}>
                 <td className="py-2 px-4">{index + 1}</td>
                 <td className="py-2 px-4">{item.name}</td>
-                <td className="py-2 px-4">{item.open}</td>
-                <td className="py-2 px-4">{item.close}</td>
+                <td className="py-2 px-4">{item.openTime}</td>
+                <td className="py-2 px-4">{item.closeTime}</td>
                 <td className="py-2 px-4">{item.status}</td>
                 <td className="py-2 px-4 flex space-x-2">
                   <button
