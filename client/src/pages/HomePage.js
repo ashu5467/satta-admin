@@ -100,21 +100,31 @@
           {/* Overlay for better button visibility */}
           <div className="absolute inset-0 bg-black opacity-20"></div>
 
-          {/* WhatsApp and Call Buttons Section */}
-          <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 w-full bg-[#3B1F18] py-4 flex justify-around items-center space-x-2">
-            <button className="flex items-center justify-center p-4 bg-[#3B1F18] text-white border-2 border-white rounded-md shadow hover:bg-[#4C2D23] w-2/5">
-              <FaWhatsapp size={20} className="mr-2" />
-              WhatsApp
-            </button>
-            <button className="flex items-center justify-center p-4 bg-[#3B1F18] text-white border-2 border-white rounded-md shadow hover:bg-[#4C2D23] w-2/5">
-              <FaPhone size={20} className="mr-2" />
-              Call
-            </button>
-          </div>
+
+{/* WhatsApp and Call Buttons Section */}
+<div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 w-full bg-[#3B1F18] py-4 flex justify-center items-center space-x-4">
+  {/* WhatsApp Button */}
+  <a href="https://wa.me/8010458010?text=Hello%20I%20need%20more%20info" target="_blank" rel="noopener noreferrer" className="inline-flex">
+    <button className="flex items-center justify-center p-4 bg-[#3B1F18] text-white border-2 border-white rounded-md shadow hover:bg-[#4C2D23] w-40">
+      <FaWhatsapp size={20} className="mr-2" />
+      WhatsApp
+    </button>
+  </a>
+
+  {/* Call Button */}
+  <a href="tel:+8010458010" className="inline-flex">
+    <button className="flex items-center justify-center p-4 bg-[#3B1F18] text-white border-2 border-white rounded-md shadow hover:bg-[#4C2D23] w-40">
+      <FaPhone size={20} className="mr-2" />
+      Call
+    </button>
+  </a>
+</div>
+
+
 
           {/* Add Points and Telegram Buttons Section */}
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full flex justify-center space-x-4">
-            <button className="flex items-center justify-center text-sm bg-transparent text-white border-2 border-white rounded-md shadow hover:bg-[#FADBD8] w-1/3">
+            <button  onClick={() => navigate('/add-points')} className="flex items-center justify-center text-sm bg-transparent text-white border-2 border-white rounded-md shadow hover:bg-[#FADBD8] w-1/3">
               <FaPlusCircle size={18} className="mr-2" />
               Add Points
             </button>

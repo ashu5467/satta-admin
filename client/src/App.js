@@ -16,6 +16,9 @@ import CheckoutPage from "./pages/CheckoutPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import PlayClosePage from "./pages/PlayClosePage";
+import AddPointsPage from "./pages/AddPointsPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -72,6 +75,13 @@ function App() {
                 element={isAuthenticated ? <Navigate to="/" /> : <SignupPage />}
               />
 
+           
+
+              <Route
+                path="/forgot-password"
+                element={isAuthenticated ? <Navigate to="/" /> : <ForgotPasswordPage />}
+              />
+
               <Route
                 path="/"
                 element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
@@ -88,6 +98,11 @@ function App() {
                 path="/withdraw-requests"
                 element={isAuthenticated ? <Withdraw /> : <Navigate to="/login" />}
               />
+               <Route
+                path="/add-points"
+                element={isAuthenticated ? <AddPointsPage /> : <Navigate to="/login" />}
+              />
+
               <Route
                 path="/game-rates"
                 element={isAuthenticated ? <Gamerates /> : <Navigate to="/login" />}
@@ -105,6 +120,11 @@ function App() {
               <Route
                 path="/play-open"
                 element={isAuthenticated ? <PlayOpenPage /> : <Navigate to="/login" />}
+              />
+
+              <Route
+                path="/play-close"
+                element={isAuthenticated ? <PlayClosePage /> : <Navigate to="/login" />}
               />
               <Route
                 path="/checkout"

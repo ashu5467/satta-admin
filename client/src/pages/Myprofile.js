@@ -5,14 +5,16 @@ import { CgProfile } from "react-icons/cg";
 import axios from 'axios'; // Assuming axios for API calls
 import { useNavigate } from 'react-router-dom';
 
+
 const MyProfile = () => {
   // State for personal details
   const navigate = useNavigate();
   const [personalDetails, setPersonalDetails] = useState({
-    username: "",
+    name: "",
     dob: "",
     phone: "",
     email: "",
+    points: "",
   });
 
   // State for payment details
@@ -87,54 +89,68 @@ const MyProfile = () => {
 
 
 
+  const fetchProfileData = () => {
+    axios.get('http://localhost:5000/api/users/profile', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+      },
+    })
+      .then(response => {
+        console.log('Fetched User Profile:', response.data);
+        setPersonalDetails(response.data.personalDetails || {});
+        setPaymentDetails(response.data.paymentDetails || {});
+      })
+      .catch(error => {
+        console.error('Error fetching user data:', error);
+      });
+  };
+  
+  
+
+
   const savePersonalDetails = () => {
     const updatedDetails = {
-      
+      name: personalDetails.name,
       dob: personalDetails.dob,
       phone: personalDetails.phone,
       email: personalDetails.email,
+      points: personalDetails.points,
     };
   
-    console.log("Updated Payload:", updatedDetails);
     axios.put('http://localhost:5000/api/users/profile', updatedDetails, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`,
       },
     })
-    .then(response => {
-      console.log('Profile updated successfully', response.data); // Log success
-    })
-    .catch(error => {
-      console.error('Error updating profile:', error.response?.data || error.message); // Log error
-    });
-    
+      .then(response => {
+        console.log('Profile updated successfully', response.data);
+        
+        // Update the state with the new values
+        setPersonalDetails(updatedDetails);
+        setIsEditingPersonal(false); // Exit edit mode
+      })
+      .catch(error => {
+        console.error('Error updating profile:', error.response?.data || error.message);
+      });
   };
   
   
 
   const savePaymentDetails = () => {
-    const token = localStorage.getItem('authToken');
-    console.log('Token used for saving payment details:', token);
-    
-    
     axios.put('http://localhost:5000/api/users/profile/payment', paymentDetails, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-       // Ensure token is stored and retrieved correctly
       },
     })
       .then(response => {
-        if (response.data.token) {
-          localStorage.setItem('authToken', response.data.token);
-          
-        }
         console.log('Payment details updated successfully');
-        setIsEditingPayment(false);
+        // Update the state with the new values
+        setPaymentDetails(paymentDetails);
+        setIsEditingPayment(false); // Exit edit mode
       })
       .catch(error => {
         console.error('Error updating payment details:', error);
       });
-    
   };
   
 
@@ -156,12 +172,32 @@ const MyProfile = () => {
       </div>
 
       {/* Name */}
-      <h1 className="mt-4 text-2xl font-semibold text-white">John Doe</h1>
+      <h1 className="mt-4 text-2xl font-semibold text-white">{personalDetails.name}</h1>
 
       {/* Personal Details */}
       <div className="bg-opacity-50 shadow-md rounded-lg mt-6 p-6 w-full max-w-md">
         <h2 className="text-lg font-bold text-white">Personal Details</h2>
         <div className="mt-4">
+
+           {/* name*/}
+           <div className="flex items-center mb-4">
+            <FaCalendarAlt className="mr-2 text-blue-500" />
+            <span className="font-medium text-white">name </span>
+            {isEditingPersonal ? (
+              <input
+                type="text"
+                name="name"
+                value={personalDetails.name}
+                onChange={handlePersonalChange}
+                className="ml-2 text-black p-2 rounded w-full"
+              />
+            ) : (
+              <span className="ml-2 text-white">{personalDetails.name}</span>
+            )}
+          </div>
+
+
+
           {/* Date of Birth */}
           <div className="flex items-center mb-4">
             <FaCalendarAlt className="mr-2 text-blue-500" />

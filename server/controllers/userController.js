@@ -1,18 +1,6 @@
 // controllers/userController.js
 const User = require('../models/user');
-
-
 const jwt = require('jsonwebtoken');
-
-
-
-
-
-
-
-
-
-
 
 // Get all users
 const getUsers = async (req, res) => {
@@ -183,12 +171,12 @@ const loginUser = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id; // Extracted from the token in middleware
-    const { dob, phone, email } = req.body;
+    const {name, dob, phone, email, points } = req.body;
 
     // Update the user in the database
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { dob, phone, email },
+      { name, dob, phone, email ,points},
       { new: true, runValidators: true }
     );
 
@@ -233,26 +221,143 @@ const updatePaymentDetails = async (req, res) => {
 
 
 
-const getUserProfile = (req, res) => {
-  // In a real application, fetch the user data from your database
-  const userProfile = {
-    personalDetails: {
-      dob: "1990-01-01",  // Date of Birth
-      phone: "1234567890", // Contact No
-      email: "user@example.com" // Email
-    },
-    paymentDetails: {
-      googlePay: "googlepay@upi",
-      phonePe: "phonepe@upi",
-      paytm: "paytm@upi",
-      upi: "user@upi"
-    }
-  };
+const getUserProfile = async (req, res) => {
+  try {
+    // Assuming the user ID is stored in the JWT token, which is sent via Authorization header
+    const userId = req.user.id || req.params.id || req.query.id || req.body.id;
+     
 
-  // Sending the user profile data as a response
-  res.json(userProfile);
+    // Fetch the user from the database
+    const user = await User.findById(userId);
+    console.log("this is userID",user)
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Respond with the user's personal and payment details
+    return res.status(200).json({
+      personalDetails: {
+        name:user.name,
+        dob: user.dob,
+        phone: user.mobile,
+        email: user.email,
+        points: user.points,
+      },
+      paymentDetails: {
+        googlePay: user.googlePay,
+        phonePe: user.phonePe,
+        paytm: user.paytm,
+        upi: user.upi
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 
 
-module.exports = {getUserProfile, updateProfile, updatePaymentDetails, loginUser, signupUser, getUsers, createUser, updateUser, deleteUser };
+const addTransaction = async (req, res) => {
+  const { description, pointsSpent } = req.body;
+
+  try {
+    const userId = req.user.id; // Extract user ID from JWT
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.points < pointsSpent) {
+      return res.status(400).json({ message: 'Insufficient points balance' });
+    }
+
+    // Calculate remaining balance
+    const remainingBalance = user.points - pointsSpent;
+
+    // Add the transaction to the user's history
+    user.transactions.push({
+      date: new Date(),
+      description,
+      points: pointsSpent,
+      balance: remainingBalance,
+    });
+
+    // Update the user's points
+    user.points = remainingBalance;
+
+    await user.save();
+    res.status(200).json({ message: 'Transaction successful', transactions: user.transactions });
+  } catch (err) {
+    console.error('Error adding transaction:', err);
+    res.status(500).json({ message: 'Error processing transaction', error: err.message });
+  }
+};
+
+// Get transaction history for a user
+const getTransactions = async (req, res) => {
+  try {
+    const userId = req.user.id; // Extract user ID from JWT
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ transactions: user.transactions });
+  } catch (err) {
+    console.error('Error fetching transactions:', err);
+    res.status(500).json({ message: 'Error fetching transactions', error: err.message });
+  }
+};
+
+
+
+
+const addPoints = async (req, res) => {
+  // Extract user ID from the authenticated user's token
+  const userId = req.user.id; // This comes from middleware that decodes the JWT token
+  
+  try {
+    const { points } = req.body;
+
+    // Validate the points
+    if (!points || isNaN(points) || points <= 0) {
+      return res.status(400).json({ message: 'Please provide valid points' });
+    }
+
+    // Fetch the user from the database using the user ID from the token
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Add the points to the user's balance
+    user.points += points;
+
+    // Save the updated user data
+    await user.save();
+
+    // Send the success response
+    res.status(200).json({
+      message: 'Points added successfully',
+      user: {
+        id: user._id,
+        name: user.name,
+        mobile: user.mobile,
+        points: user.points,
+      },
+    });
+  } catch (err) {
+    console.error('Error adding points:', err);
+    res.status(500).json({ message: 'Error adding points', error: err.message });
+  }
+};
+
+
+
+
+
+module.exports = {addPoints,getTransactions, addTransaction, getUserProfile, updateProfile, updatePaymentDetails, loginUser, signupUser, getUsers, createUser, updateUser, deleteUser };

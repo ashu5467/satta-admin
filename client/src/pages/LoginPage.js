@@ -79,6 +79,16 @@ const LoginPage = ({ onLogin }) => { // Receive the onLogin function from App.js
         Login
       </button>
 
+      <p className="mt-2 text-white">
+  Forgot your password?{' '}
+  <span
+    className="text-blue-300 cursor-pointer hover:underline"
+    onClick={() => navigate('/forgot-password')}
+  >
+    Reset Password
+  </span>
+</p>
+
       <p className="mt-4 text-white">
         Don’t have an account?{' '}
         <span
@@ -88,6 +98,8 @@ const LoginPage = ({ onLogin }) => { // Receive the onLogin function from App.js
           Sign Up Here
         </span>
       </p>
+
+      
     </div>
   );
 };

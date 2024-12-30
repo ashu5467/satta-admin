@@ -18,6 +18,16 @@ const userSchema = new mongoose.Schema({
     paytm: { type: String },
     upi: { type: String },
   
+
+     // Transaction History
+  transactions: [
+    {
+      date: { type: Date, required: true, default: Date.now }, // Transaction date
+      description: { type: String, required: true }, // Description of the transaction
+      points: { type: Number, required: true }, // Points spent in the transaction
+      balance: { type: Number, required: true }, // Remaining balance after the transaction
+    },
+  ],
   
 });
 
