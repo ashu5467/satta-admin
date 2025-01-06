@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   points: { type: Number, default: 0 },
   canPlay: { type: String, enum: ['Yes', 'No'], default: 'Yes' },
   status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' },
+  createdAt: { type: Date, default: Date.now },
 
 
 

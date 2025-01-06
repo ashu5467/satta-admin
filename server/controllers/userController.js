@@ -144,28 +144,6 @@ const loginUser = async (req, res) => {
 
 
 
-// Update user profile
-// const updateProfile = async (req, res) => {
-//   const userId = req.user.id; // Assuming you use authentication middleware
-//   const { personalDetails } = req.body;
-
-//   try {
-//     const user = await User.findById(userId);
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     user.dob = personalDetails.dob || user.dob;
-//     user.phone = personalDetails.phone || user.phone;
-//     user.email = personalDetails.email || user.email;
-
-//     await user.save();
-//     res.status(200).json({ message: 'Profile updated successfully', user });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error updating profile', error });
-//   }
-// };
-
 
 // Update user profile
 const updateProfile = async (req, res) => {
@@ -357,7 +335,50 @@ const addPoints = async (req, res) => {
 };
 
 
+// const getTodaySignups = async (req, res) => {
+//   try {
+//     const today = new Date().setHours(0, 0, 0, 0); // Get today's date at midnight
+//     const tomorrow = new Date(today);
+//     tomorrow.setDate(tomorrow.getDate() + 1); // Get tomorrow's date
+
+//     const todaySignups = await User.countDocuments({
+//       createdAt: { $gte: today, $lt: tomorrow },
+//     });
+
+    
+
+//     res.status(200).json({ todaySignups });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching today\'s signups', error: error.message });
+//   }
+// };
 
 
 
-module.exports = {addPoints,getTransactions, addTransaction, getUserProfile, updateProfile, updatePaymentDetails, loginUser, signupUser, getUsers, createUser, updateUser, deleteUser };
+
+ // Import User model
+const moment = require('moment'); // For date comparisons
+
+const getTodaySignups = async (req, res) => {
+  try {
+    const startOfDay = moment().startOf('day').toDate();
+    const endOfDay = moment().endOf('day').toDate();
+
+    const todaySignups = await User.find({
+      createdAt: { $gte: startOfDay, $lte: endOfDay },
+    });
+
+    res.json({
+      todaySignups: todaySignups.length,
+      newUsers: todaySignups,
+    });
+  } catch (error) {
+    console.error('Error fetching today\'s signups:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+
+module.exports = {getTodaySignups, addPoints,getTransactions, addTransaction, getUserProfile, updateProfile, updatePaymentDetails, loginUser, signupUser, getUsers, createUser, updateUser, deleteUser };

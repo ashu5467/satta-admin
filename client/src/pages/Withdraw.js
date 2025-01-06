@@ -4,13 +4,38 @@ import bgImage from '../assets/maroonbg.jpg';
 const Withdraw = () => {
   const [amount, setAmount] = useState(""); // State for amount
   const [selectedUPI, setSelectedUPI] = useState(""); // State for selected UPI
+  const [upiId, setUpiId] = useState(""); // State for UPI ID
 
-  const handleSubmit = () => {
-    if (!amount || !selectedUPI) {
-      alert("Please enter an amount and select a UPI option.");
+  const handleSubmit = async () => {
+    if (!amount || !selectedUPI || !upiId) {
+      alert("Please enter an amount, select a UPI option, and provide a UPI ID.");
     } else {
-      alert(`Withdraw request of ₹${amount} via ${selectedUPI} submitted successfully.`);
-      // Add your form submission logic here
+      const data = {
+        amount,
+        upiOption: selectedUPI,
+        upiId,
+      };
+
+      try {
+        const response = await fetch('http://localhost:5000/api/transactions/debit-request', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert(`Withdraw request of ₹${amount} via ${selectedUPI} to ${upiId} submitted successfully.`);
+        } else {
+          alert(result.message || "Error submitting withdrawal request.");
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert("An error occurred while submitting your request.");
+      }
     }
   };
 
@@ -65,6 +90,21 @@ const Withdraw = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Input for UPI ID */}
+      <div className="mb-6">
+        <label htmlFor="upiId" className="block text-sm font-medium text-white mb-2">
+          Enter UPI ID
+        </label>
+        <input
+          id="upiId"
+          type="text"
+          value={upiId}
+          onChange={(e) => setUpiId(e.target.value)}
+          placeholder="Enter your UPI ID"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+        />
       </div>
 
       {/* Submit Button */}

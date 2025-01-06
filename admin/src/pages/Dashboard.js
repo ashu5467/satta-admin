@@ -10,6 +10,30 @@ const Dashboard = () => {
   const [openPatti, setOpenPatti] = useState('');
   const [jodi, setJodi] = useState('');
   const [closePatti, setClosePatti] = useState('');
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [newDebitRequests, setNewDebitRequests] = useState([]);
+  const [isDebitModalOpen, setIsDebitModalOpen] = useState(false);
+
+  const [newUsers, setNewUsers] = useState([]);
+
+
+  const [newUserCount, setNewUserCount] = useState(0);
+  const [newDebitCount, setNewDebitCount] = useState(0);
+
+  useEffect(() => {
+    const fetchNewUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/users/today-signups');
+        const data = await response.json();
+        setNewUserCount(data.todaySignups);
+      } catch (error) {
+        console.error('Error fetching today\'s signups:', error);
+      }
+    };
+
+    fetchNewUsers();
+  }, []);
+
 
   // Fetch market data from API
   useEffect(() => {
@@ -43,48 +67,56 @@ const Dashboard = () => {
   const handleJodiChange = (e) => setJodi(e.target.value);
   const handleClosePattiChange = (e) => setClosePatti(e.target.value);
 
- 
 
-  // const handleFormSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (openPatti && jodi && closePatti && resultDate) {
-  //     try {
-  //       const response = await fetch(`http://localhost:5000/api/markets/${selectedMarket._id}/result`, {
-  //         method: 'PUT',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           resultDate,
-  //           openPatti,
-  //           jodi,
-  //           closePatti,
-  //         }),
-  //       });
+
+
+  useEffect(() => {
+    const fetchNewDebitRequests = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/transactions/debit-request-today'); // API endpoint to fetch new debit requests for today
+        const data = await response.json();
+        
+        // Access requestCount from the first object in newDebitRequests array
+        const count = data.newDebitRequests && data.newDebitRequests[0] ? data.newDebitRequests[0].requestCount : 0;
+        setNewDebitCount(count); // Update state with the count
+      } catch (error) {
+        console.error('Error fetching new debit requests:', error);
+      }
+    };
   
-  //       if (!response.ok) {
-  //         throw new Error('Failed to update result');
-  //       }
+    fetchNewDebitRequests();
+  }, []);
   
-  //       const updatedMarket = await response.json();
+
+
+
+
+
+  const handleNewDebitRequestsClick = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/transactions/debit-request'); // Your API endpoint to fetch new debit requests
+      const data = await response.json();
+      setNewDebitRequests(data.newDebitRequests); // Update with the list of new debit requests
+      setIsDebitModalOpen(true); // Open the modal
+    } catch (error) {
+      console.error('Error fetching new debit requests:', error);
+    }
+  };
   
-  //       // Update the market data in the frontend
-  //       setMarketData((prevData) =>
-  //         prevData.map((market) =>
-  //           market._id === updatedMarket._id ? updatedMarket : market
-  //         )
-  //       );
+
+  const handleNewUsersClick = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/users/today-signups');
+      const data = await response.json();
+      console.log(data); // Debug API response
+      setNewUsers(data.newUsers || []); // Safely access newUsers
+      setIsUserModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching new users:', error);
+    }
+  };
   
-  //       alert('Result updated successfully!');
-  //       setIsModalOpen(false);
-  //     } catch (error) {
-  //       console.error('Error updating result:', error);
-  //       alert('Error updating result');
-  //     }
-  //   } else {
-  //     alert('Please fill in all fields.');
-  //   }
-  // };
+
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -129,25 +161,32 @@ const Dashboard = () => {
         {/* Stats Cards */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-[#17A2B8] shadow-md rounded-lg p-6 flex flex-col justify-between h-full">
-            <div className="text-3xl font-bold text-white text-left w-full">0</div>
+            <div className="text-3xl font-bold text-white text-left w-full">{newDebitCount}</div>
             <h3 className="text-xl font-semibold text-white text-left w-full mb-auto">New Debit Requests</h3>
 
-            <button className="bg-[#148A9D] text-sm text-white py-2 border-t border-white w-full rounded-b-lg flex justify-between items-center px-4 hover:bg-[#11707A] transition-colors">
+            <button 
+            onClick={handleNewDebitRequestsClick}
+            className="bg-[#148A9D] text-sm text-white py-2 border-t border-white w-full rounded-b-lg flex justify-between items-center px-4 hover:bg-[#11707A] transition-colors">
               <span>Check Now</span>
               <FaArrowRight />
             </button>
           </div>
 
           <div className="bg-[#28A745] shadow-md rounded-lg p-6 flex flex-col justify-between h-full">
-            <div className="text-3xl font-bold text-white text-left w-full">0</div>
+            <div className="text-3xl font-bold text-white text-left w-full">{newUserCount}</div>
             <h3 className="text-xl font-semibold text-white text-left w-full mb-auto">New Users</h3>
 
-            <button className="bg-[#228E3B] text-sm text-white py-2 border-t border-white w-full rounded-b-lg flex justify-between items-center px-4 hover:bg-[#11707A] transition-colors">
+            <button 
+            onClick={handleNewUsersClick}
+            className="bg-[#228E3B] text-sm text-white py-2 border-t border-white w-full rounded-b-lg flex justify-between items-center px-4 hover:bg-[#11707A] transition-colors">
               <span>Check Now</span>
               <FaArrowRight />
             </button>
           </div>
         </section>
+
+
+        
 
         {/* Overview Section */}
         <section className="w-full">
@@ -201,6 +240,80 @@ const Dashboard = () => {
           </div>
         </section>
       </main>
+
+
+
+      {isDebitModalOpen && (
+  <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+    <div className="bg-white p-6 rounded-lg w-[600px]">
+      <h3 className="text-xl font-semibold text-gray-700 mb-4">New Debit Requests</h3>
+      {newDebitRequests.length > 0 ? (
+        <ul className="space-y-2">
+          {newDebitRequests.map((request, index) => (
+            <li key={index} className="border-b py-2">
+              <div className="text-gray-700">
+                <strong>User:</strong> {request.userName}
+              </div>
+              <div className="text-gray-700">
+                <strong>Amount:</strong> {request.amount}
+              </div>
+              <div className="text-gray-500 text-sm">
+                <strong>Requested At:</strong> {new Date(request.createdAt).toLocaleString()}
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-500">No new debit requests.</p>
+      )}
+      <button
+        className="mt-4 bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400"
+        onClick={() => setIsDebitModalOpen(false)}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
+
+
+      {/* Modal for Today's Signed-up Users */}
+      {isUserModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg w-[600px]">
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">Today's Signed-up Users</h3>
+            {newUsers.length > 0 ? (
+              <ul className="space-y-2">
+                {newUsers.map((user, index) => (
+                  <li key={index} className="border-b py-2">
+                    <div className="text-gray-700">
+                      <strong>Name:</strong> {user.name}
+                    </div>
+                    <div className="text-gray-700">
+                      <strong>Email:</strong> {user.email}
+                    </div>
+                    <div className="text-gray-500 text-sm">
+                      <strong>Joined:</strong> {new Date(user.createdAt).toLocaleString()}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500">No new users signed up today.</p>
+            )}
+            <button
+              className="mt-4 bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400"
+              onClick={() => setIsUserModalOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    
+
+
 
      {/* Modal for entering result */}
 {isModalOpen && (

@@ -301,6 +301,12 @@ const PlayClosePage = () => {
         )}
       </div>
 
+
+       {/* Total count of added items */}
+       <div className="text-white mb-4">
+        Total : {biddingItems.length}
+      </div>
+
       {/* Input Section for Bidding */}
       <div className="flex flex-col space-y-4 w-full max-w-md">
         <div className="flex space-x-4">
@@ -330,6 +336,8 @@ const PlayClosePage = () => {
       {/* Total Points */}
       <div className="mt-4 text-white text-lg font-semibold">
         Total Rs: {biddingItems.reduce((total, item) => total + parseFloat(item.points || 0), 0)}
+
+       
       </div>
     </div>
   );

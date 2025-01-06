@@ -26,22 +26,24 @@ const DebitRequests = () => {
 
   const fetchRequests = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/debit-requests");
+      const response = await fetch("http://localhost:5000/api/transactions/debit-request");
       if (!response.ok) throw new Error("Failed to fetch requests");
       const data = await response.json();
-      setRequestsData(data);
+      console.log("Fetched data:", data); // Debug log
+      setRequestsData(data.requests || []); // Adjust based on actual API response
     } catch (error) {
       console.error("Error fetching requests:", error);
     }
   };
+  
 
   const handleSaveRequest = async (e) => {
     e.preventDefault();
     try {
       const method = selectedRequest._id ? "PUT" : "POST";
       const url = selectedRequest._id
-        ? `http://localhost:5000/api/debit-requests/${selectedRequest._id}`
-        : "http://localhost:5000/api/debit-requests";
+        ? `http://localhost:5000/api/transactions/debit-request/${selectedRequest._id}`
+        : "http://localhost:5000/api/transactions/debit-request";
 
       const response = await fetch(url, {
         method,
@@ -64,7 +66,7 @@ const DebitRequests = () => {
 
   const handleDeleteRequest = async () => {
     try {
-      await fetch(`http://localhost:5000/api/debit-requests/${selectedRequest._id}`, {
+      await fetch(`http://localhost:5000/api/transactions/debit-request/${selectedRequest._id}`, {
         method: "DELETE",
       });
       fetchRequests();
@@ -89,6 +91,12 @@ const DebitRequests = () => {
   };
 
   const filterRequests = () => {
+    if (!Array.isArray(requestsData)) {
+      console.error("requestsData is not an array:", requestsData);
+      setFilteredRequests([]);
+      return;
+    }
+  
     const filtered = requestsData.filter((request) => {
       return (
         request.date.toLowerCase().includes(searchFilters.date.toLowerCase()) &&
@@ -99,8 +107,10 @@ const DebitRequests = () => {
         request.status.toLowerCase().includes(searchFilters.status.toLowerCase())
       );
     });
+  
     setFilteredRequests(filtered);
   };
+  
 
   return (
     <div className="p-6 space-y-6">

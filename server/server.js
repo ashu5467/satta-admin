@@ -8,6 +8,7 @@ const resultRoutes = require('./routes/resultRoutes');
 const bannerRoutes = require('./routes/bannerRoutes');
 const userRoutes = require('./routes/userRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const transactionRoutes = require('./routes/transactionRoutes');
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.use('/api/results', resultRoutes);
 app.use('/api/banner', bannerRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/notifications', notificationRoutes);
+// app.use('/api', transactionRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
