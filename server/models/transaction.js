@@ -22,6 +22,15 @@ const transactionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  user: {
+    type: String, // Reference to User model
+    ref: 'User',
+    required: true,
+  },
+  mobile: {
+    type: String,
+    required: true, // You can also make this optional based on your use case
+  },
 });
 
 const Transaction = mongoose.model('Transaction', transactionSchema);

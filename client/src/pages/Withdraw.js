@@ -1,11 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import bgImage from '../assets/maroonbg.jpg';
+import { UserContext } from '../context/UserContext';
 
 const Withdraw = () => {
+  const { userDetails } = useContext(UserContext); 
   const [amount, setAmount] = useState(""); // State for amount
   const [selectedUPI, setSelectedUPI] = useState(""); // State for selected UPI
   const [upiId, setUpiId] = useState(""); // State for UPI ID
+  const [user, setUser] = useState(""); // State for user (fetched automatically)
+  const [mobile, setMobile] = useState(""); // State for mobile (fetched automatically)
 
+  // Fetch logged-in user's data
+  useEffect(() => {
+    const token = localStorage.getItem('authToken'); 
+    console.log('Retrieved Token:', token);
+  
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/users/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`, // Assuming token is stored in localStorage
+          },
+        });
+  
+        if (response.ok) {
+          const userData = await response.json();
+  
+          // Log the fetched userData
+          console.log('Fetched User Data:', userData);
+  
+          setUser(userData.username); // Assuming the API returns `username`
+          setMobile(userData.mobile); // Assuming the API returns `mobile`
+        } else {
+          console.error("Failed to fetch user data.");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+  
   const handleSubmit = async () => {
     if (!amount || !selectedUPI || !upiId) {
       alert("Please enter an amount, select a UPI option, and provide a UPI ID.");
@@ -14,13 +52,18 @@ const Withdraw = () => {
         amount,
         upiOption: selectedUPI,
         upiId,
+        userId : userDetails._id,
+        mobile : userDetails.phone,
       };
+
+      console.log('Data to be sent:', data);
 
       try {
         const response = await fetch('http://localhost:5000/api/transactions/debit-request', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
           body: JSON.stringify(data),
         });

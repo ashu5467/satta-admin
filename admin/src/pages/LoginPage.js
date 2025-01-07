@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Make sure axios is imported
 
 const LoginPage = ({ setAuthenticated }) => {
   const [mobile, setMobile] = useState("");
@@ -7,16 +8,43 @@ const LoginPage = ({ setAuthenticated }) => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (mobile === "admin" && password === "password") {
-      if (rememberMe) {
-        localStorage.setItem("isAuthenticated", true);
+
+    // Validate fields
+    if (!mobile || !password) {
+      alert("Please fill in both fields");
+      return;
+    }
+
+    // Create the login credentials object
+    const loginData = {
+      mobile,
+      password,
+    };
+
+    try {
+      // Make a POST request to the backend to check the credentials
+      const response = await axios.post("http://localhost:5000/api/admins/login", loginData);
+
+      // If login is successful
+      if (response.status === 200) {
+        alert("Login successful!");
+        
+        // Store the JWT token if the user selected "Remember Me"
+        if (rememberMe) {
+          localStorage.setItem("token", response.data.token); // Store token in localStorage
+        }
+
+        // Set the authentication state
+        setAuthenticated(true);
+
+        // Redirect to the dashboard
+        navigate("/dashboard");
       }
-      setAuthenticated(true);
-      navigate("/dashboard");
-    } else {
-      alert("Invalid credentials");
+    } catch (error) {
+      console.error("Error logging in:", error);
+      alert(error.response?.data?.message || "Error logging in, please try again.");
     }
   };
 

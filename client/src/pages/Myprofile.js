@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useContext} from 'react';
 import { FaUser, FaCalendarAlt, FaPhone, FaEnvelope, FaCcPaypal, FaGooglePay, FaPhoneAlt } from 'react-icons/fa';
 import bgImage from '../assets/maroonbg.jpg';
 import { CgProfile } from "react-icons/cg";
 import axios from 'axios'; // Assuming axios for API calls
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
+
 
 
 const MyProfile = () => {
   // State for personal details
   const navigate = useNavigate();
+  const { setUserDetails } = useContext(UserContext);
   const [personalDetails, setPersonalDetails] = useState({
     name: "",
     dob: "",
@@ -48,6 +51,10 @@ const MyProfile = () => {
       console.log('Fetched User Profile:', response.data);
       setPersonalDetails(response.data.personalDetails);
       setPaymentDetails(response.data.paymentDetails);
+      setUserDetails({
+        name: response.data.personalDetails.name,
+        phone: response.data.personalDetails.phone,
+      }); // Update context
     })
     .catch(error => {
       console.error('Error fetching user data:', error);
@@ -57,7 +64,7 @@ const MyProfile = () => {
         navigate('/login');
       }
     });
-  }, [navigate]);
+  }, [navigate , setUserDetails]);
   
   // Handler to toggle personal details edit mode
   const handleEditPersonal = () => {

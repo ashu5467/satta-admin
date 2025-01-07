@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
   status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' },
   createdAt: { type: Date, default: Date.now },
 
+  role: { type: String, enum: ["User", "Admin"], default: "User" },
+
 
 
     email: { type: String },  // New field for email

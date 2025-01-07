@@ -9,6 +9,7 @@ const bannerRoutes = require('./routes/bannerRoutes');
 const userRoutes = require('./routes/userRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/notifications', notificationRoutes);
 // app.use('/api', transactionRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use("/api/admins", adminRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

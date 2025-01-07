@@ -92,16 +92,38 @@ const Dashboard = () => {
 
 
 
+  // const handleNewDebitRequestsClick = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:5000/api/transactions/debit-request'); // Your API endpoint to fetch new debit requests
+  //     const data = await response.json();
+  //     setNewDebitRequests(data.newDebitRequests); // Update with the list of new debit requests
+  //     setIsDebitModalOpen(true); // Open the modal
+  //   } catch (error) {
+  //     console.error('Error fetching new debit requests:', error);
+  //   }
+  // };
+
+
   const handleNewDebitRequestsClick = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/transactions/debit-request'); // Your API endpoint to fetch new debit requests
+      const response = await fetch('http://localhost:5000/api/transactions/debit-request');
       const data = await response.json();
-      setNewDebitRequests(data.newDebitRequests); // Update with the list of new debit requests
-      setIsDebitModalOpen(true); // Open the modal
+      console.log(data);  // Check the API response here
+  
+      // Ensure the data is structured correctly
+      if (data.newDebitRequests && Array.isArray(data.newDebitRequests)) {
+        setNewDebitRequests(data.newDebitRequests); // Update state with the list of new debit requests
+        setIsDebitModalOpen(true); // Open the modal
+      } else {
+        console.error('Invalid data format', data); // Log an error if the data structure is not correct
+        alert('No new debit requests or incorrect data format.');
+      }
     } catch (error) {
       console.error('Error fetching new debit requests:', error);
+      alert('Error fetching new debit requests');
     }
   };
+  
   
 
   const handleNewUsersClick = async () => {

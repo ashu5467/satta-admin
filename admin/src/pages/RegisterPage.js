@@ -1,18 +1,60 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Importing axios
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    alert("Registration successful!");
-    navigate("/login");
+  
+    // Validate if passwords match before proceeding with registration
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!"); // Show error message
+      return; // Prevent registration
+    }
+  
+    // Validate if the mobile number is exactly 10 digits
+    const mobileRegex = /^[0-9]{10}$/;
+    if (!mobileRegex.test(mobile)) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+  
+    // Log the user data to check what's being sent
+    console.log({
+      username,
+      mobile,
+      password,
+    });
+  
+    // Create the user object to send to the backend
+    const userData = {
+      username,
+      mobile: mobile,
+      password: password,
+    };
+  
+    try {
+      // Make a POST request to the backend
+      const response = await axios.post("http://localhost:5000/api/admins/signup", userData);
+  
+      // If registration is successful
+      if (response.status === 200) {
+        alert("Registration successful!");
+        navigate("/login");
+      }
+    } catch (error) {
+      // Handle error
+      console.error("Error registering user:", error.response ? error.response.data : error);
+      alert("Error registering user. Please try again.");
+    }
   };
-
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
       {/* Login/Register Toggle */}
@@ -61,6 +103,16 @@ const RegisterPage = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 mb-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          />
+
+          {/* Confirm Password Input */}
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full px-4 py-2 mb-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
           />
