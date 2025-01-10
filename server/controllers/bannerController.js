@@ -1,5 +1,5 @@
 // controllers/bannerController.js
-const Banner = require('../models/Banner');
+const Banner = require('../models/banner');
 
 // Handle banner upload
 exports.uploadBanner = async (req, res) => {

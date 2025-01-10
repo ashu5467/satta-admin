@@ -1,4 +1,4 @@
-const Transaction = require('../models/transaction'); // Assuming you have a Transaction model
+const Transaction = require('../models/Transaction'); // Assuming you have a Transaction model
 
 
 
