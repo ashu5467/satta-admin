@@ -35,19 +35,6 @@ const Results = () => {
     setNewResult({ ...newResult, [name]: value });
   };
 
-  // Create new result
-  // const handleAddResult = async () => {
-  //   if (newResult.date && newResult.market && newResult.result) {
-  //     try {
-  //       const response = await axios.post('http://localhost:5000/api/results', newResult);
-  //       setResultData([...resultData, response.data]);
-  //       setNewResult({ date: '', market: '', result: '' });
-  //       setIsModalOpen(false);
-  //     } catch (error) {
-  //       console.error('Error adding result:', error);
-  //     }
-  //   }
-  // };
 
 
 

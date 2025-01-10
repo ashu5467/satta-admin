@@ -31,8 +31,8 @@ const Withdraw = () => {
           // Log the fetched userData
           console.log('Fetched User Data:', userData);
   
-          setUser(userData.username); // Assuming the API returns `username`
-          setMobile(userData.mobile); // Assuming the API returns `mobile`
+          setUser(userData.personalDetails.name); // Assuming the API returns `username`
+          setMobile(userData.personalDetails.phone); // Assuming the API returns `mobile`
         } else {
           console.error("Failed to fetch user data.");
         }
@@ -52,8 +52,8 @@ const Withdraw = () => {
         amount,
         upiOption: selectedUPI,
         upiId,
-        userId : userDetails._id,
-        mobile : userDetails.phone,
+        user : user,
+        mobile :mobile,
       };
 
       console.log('Data to be sent:', data);

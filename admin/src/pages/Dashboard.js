@@ -89,21 +89,6 @@ const Dashboard = () => {
   
 
 
-
-
-
-  // const handleNewDebitRequestsClick = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:5000/api/transactions/debit-request'); // Your API endpoint to fetch new debit requests
-  //     const data = await response.json();
-  //     setNewDebitRequests(data.newDebitRequests); // Update with the list of new debit requests
-  //     setIsDebitModalOpen(true); // Open the modal
-  //   } catch (error) {
-  //     console.error('Error fetching new debit requests:', error);
-  //   }
-  // };
-
-
   const handleNewDebitRequestsClick = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/transactions/debit-request');

@@ -12,6 +12,11 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
+const path=require("path")
+const  _dirname=path.dirname("")
+const buildpath = path.join(_dirname,"../client/build")
+
+app.use(express.static(buildpath))
 
 // Middleware
 app.use(express.json());
