@@ -19,6 +19,7 @@ import SignupPage from "./pages/SignupPage";
 import PlayClosePage from "./pages/PlayClosePage";
 import AddPointsPage from "./pages/AddPointsPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import UPIPayment from "./pages/UPIPayment";
 
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -133,6 +134,15 @@ function App() {
               <Route
                 path="/confirmation"
                 element={isAuthenticated ? <ConfirmationPage /> : <Navigate to="/login" />}
+              />
+
+
+              <Route
+                path="/upi-payment"
+                element={ <UPIPayment />}
+                //main route is commented for testing later this shoud be uncommented
+
+               // element={isAuthenticated ? <UPIPayment /> : <Navigate to="/login" />} // New UPIPayment route
               />
             </Routes>
           </div>

@@ -5,7 +5,7 @@ const BidReports = () => {
   const [game, setGame] = useState('');
   const [type, setType] = useState('');
   const [date, setDate] = useState('');
-  const [bidData, setBidData] = useState([]);
+  // const [bidData, setBidData] = useState([]);
   
   // Sample data for demonstration (replace with actual data)
   const sampleBidData = [

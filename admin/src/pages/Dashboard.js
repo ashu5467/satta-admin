@@ -63,9 +63,9 @@ const Dashboard = () => {
 
   // Handle changes in result input fields
   const handleResultDateChange = (e) => setResultDate(e.target.value);
-  const handleOpenPattiChange = (e) => setOpenPatti(e.target.value);
-  const handleJodiChange = (e) => setJodi(e.target.value);
-  const handleClosePattiChange = (e) => setClosePatti(e.target.value);
+  // const handleOpenPattiChange = (e) => setOpenPatti(e.target.value);
+  // const handleJodiChange = (e) => setJodi(e.target.value);
+  // const handleClosePattiChange = (e) => setClosePatti(e.target.value);
 
 
 

@@ -9,12 +9,9 @@ const AddPointsPage = () => {
   const navigate = useNavigate();
 
   const predefinedPoints = [
-    10, 15, 26, 36, 46, 56, 69, 79, 126, 175, 265, 359, 459, 559, 659, 759, 859, 
-    999, 1149, 1150, 1299, 1599, 1999, 2999
+    10, 15, 26, 36, 46, 56, 69, 79, 126, 175, 265, 359, 459, 559, 659, 759, 859,
+    999, 1149, 1150, 1299, 1599, 1999, 2999,
   ];
-
-  const token = localStorage.getItem('authToken');
-  console.log('authToken:', token); // Debug: Ensure token exists
 
   const handleAddPoints = async () => {
     if (!points || isNaN(points) || parseInt(points) <= 0) {
@@ -22,7 +19,7 @@ const AddPointsPage = () => {
       return;
     }
 
-    const token = localStorage.getItem('authToken');  // Adjust this to your auth logic
+    const token = localStorage.getItem('authToken');
 
     if (!token) {
       setError('You must be logged in to add points.');
@@ -30,21 +27,27 @@ const AddPointsPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/users/add-points', {
-        points: parseInt(points),
-      },{ headers: {
-        'Authorization': `Bearer ${token}`,  // Add token to Authorization header
-        'Content-Type': 'application/json'
-      }});
+      const response = await axios.post(
+        'http://localhost:5000/api/users/add-points',
+        {
+          points: parseInt(points),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (response.status === 200) {
         setSuccessMessage('Points added successfully!');
         setError(null);
         setPoints('');
 
-        // Optionally, redirect to the homepage after adding points
+        // Redirect to the UPI Payment page
         setTimeout(() => {
-          navigate('/');
+          navigate('/upi-payment', { state: { points } }); // Pass points via state
         }, 2000);
       } else {
         setError('Failed to add points. Please try again.');
@@ -57,8 +60,8 @@ const AddPointsPage = () => {
 
   const handleOptionClick = (value) => {
     setPoints(value);
-    setError(null); // Clear any existing errors
-    setSuccessMessage(null); // Clear any success messages
+    setError(null);
+    setSuccessMessage(null);
   };
 
   return (
@@ -82,7 +85,6 @@ const AddPointsPage = () => {
           />
         </div>
 
-        {/* Predefined Points Options */}
         <div className="grid grid-cols-3 gap-2 mb-4">
           {predefinedPoints.map((option, index) => (
             <button
@@ -95,7 +97,6 @@ const AddPointsPage = () => {
           ))}
         </div>
 
-        {/* Submit Button */}
         <button
           onClick={handleAddPoints}
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
@@ -103,7 +104,6 @@ const AddPointsPage = () => {
           Submit
         </button>
 
-        {/* Cancel Button */}
         <button
           onClick={() => navigate(-1)}
           className="w-full bg-gray-300 text-black py-2 rounded-md mt-2 hover:bg-gray-400"
