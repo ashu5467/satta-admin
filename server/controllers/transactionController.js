@@ -1,4 +1,4 @@
-const Transaction = require('../models/Transaction'); // Assuming you have a Transaction model
+const transaction = require('../models/transaction'); // Assuming you have a transaction model
 
 
 
@@ -11,7 +11,7 @@ const getDebitRequests = async (req, res) => {
       const todayEnd = new Date();
       todayEnd.setHours(23, 59, 59, 999);
   
-      const debitRequests = await Transaction.aggregate([
+      const debitRequests = await transaction.aggregate([
         {
           $match: {
             status: 'pending',
@@ -76,7 +76,7 @@ const createDebitRequest = async (req, res) => {
         }
 
         // Create new debit request
-        const newDebitRequest = new Transaction({
+        const newDebitRequest = new transaction({
             amount,
             upiOption,
             upiId,
