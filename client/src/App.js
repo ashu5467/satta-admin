@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import HomePage from "./pages/Homepage";
+import HomePage from "./pages/HomePage";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import MyProfile from "./pages/Myprofile";
 import Statements from "./pages/Statements";
