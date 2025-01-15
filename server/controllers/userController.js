@@ -335,27 +335,6 @@ const addPoints = async (req, res) => {
 };
 
 
-// const getTodaySignups = async (req, res) => {
-//   try {
-//     const today = new Date().setHours(0, 0, 0, 0); // Get today's date at midnight
-//     const tomorrow = new Date(today);
-//     tomorrow.setDate(tomorrow.getDate() + 1); // Get tomorrow's date
-
-//     const todaySignups = await User.countDocuments({
-//       createdAt: { $gte: today, $lt: tomorrow },
-//     });
-
-    
-
-//     res.status(200).json({ todaySignups });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error fetching today\'s signups', error: error.message });
-//   }
-// };
-
-
-
-
  // Import User model
 const moment = require('moment'); // For date comparisons
 
