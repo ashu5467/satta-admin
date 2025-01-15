@@ -20,7 +20,16 @@ app.use(express.static(buildpath))
 
 // Middleware
 app.use(express.json());
-app.use(cors());  // Enable Cross-Origin Requests
+app.use(cors()); 
+
+app.use(
+  cors({
+    origin: '*', // Allow requests from any origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+    credentials: true, // Optional: Only use this if you need cookies or authentication
+  })
+);
+
 
 // Connect to MongoDB
 connectDB();
