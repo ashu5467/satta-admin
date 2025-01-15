@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const AddPointsPage = () => {
-  const [points, setPoints] = useState('');
+  const [points, setPoints] = useState("");
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const navigate = useNavigate();
@@ -15,46 +15,46 @@ const AddPointsPage = () => {
 
   const handleAddPoints = async () => {
     if (!points || isNaN(points) || parseInt(points) <= 0) {
-      setError('Please enter a valid number of points.');
+      setError("Please enter a valid number of points.");
       return;
     }
 
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
 
     if (!token) {
-      setError('You must be logged in to add points.');
+      setError("You must be logged in to add points.");
       return;
     }
 
     try {
       const response = await axios.post(
-        'http://13.203.91.35:5000/api/users/add-points',
+        "http://13.203.91.35:5000/api/users/add-points",
         {
           points: parseInt(points),
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (response.status === 200) {
-        setSuccessMessage('Points added successfully!');
+        setSuccessMessage("Points added successfully!");
         setError(null);
-        setPoints('');
+        setPoints("");
 
         // Redirect to the UPI Payment page
         setTimeout(() => {
-          navigate('/upi-payment', { state: { points } }); // Pass points via state
+          navigate("/upi-payment", { state: { points } }); // Pass points via state
         }, 2000);
       } else {
-        setError('Failed to add points. Please try again.');
+        setError("Failed to add points. Please try again.");
       }
     } catch (err) {
-      console.error('Error adding points:', err);
-      setError('An error occurred. Please try again later.');
+      console.error("Error adding points:", err);
+      setError("An error occurred. Please try again later.");
     }
   };
 
@@ -65,8 +65,8 @@ const AddPointsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-md shadow-md w-96">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="bg-white p-6 rounded-md shadow-md w-full max-w-md">
         <h1 className="text-xl font-bold mb-4 text-center">Add Points</h1>
 
         {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
@@ -85,7 +85,7 @@ const AddPointsPage = () => {
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-2 mb-4">
+        <div className="grid grid-cols-3 gap-2 mb-4 sm:grid-cols-4">
           {predefinedPoints.map((option, index) => (
             <button
               key={index}
