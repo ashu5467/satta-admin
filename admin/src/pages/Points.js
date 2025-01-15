@@ -22,7 +22,7 @@ const Points = () => {
 
   const fetchPoints = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/points');
+      const response = await fetch('http://13.203.91.35:5000/api/points');
       if (!response.ok) throw new Error('Failed to fetch points');
       const data = await response.json();
       setPointsData(data);

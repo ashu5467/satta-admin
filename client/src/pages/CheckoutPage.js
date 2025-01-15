@@ -22,7 +22,7 @@ const CheckoutPage = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:5000/api/users/profile', {
+      const response = await axios.get('http://13.203.91.35:5000/api/users/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -73,7 +73,7 @@ const CheckoutPage = () => {
 
       // Add transaction to the database
       const transactionResponse = await axios.post(
-        'http://localhost:5000/api/users/transaction',
+        'http://13.203.91.35:5000/api/users/transaction',
         transactionPayload,
         {
           headers: {

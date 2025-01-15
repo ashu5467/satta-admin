@@ -23,7 +23,7 @@ const ChartPage = () => {
 
     // Fetch chart data for the market
     axios
-      .get(`http://localhost:5000/api/markets/${marketId}/results`)
+      .get(`http://13.203.91.35:5000/api/markets/${marketId}/results`)
       .then((response) => {
         console.log('API Response:', response.data); // Log the full response data
         setChartData(response.data);

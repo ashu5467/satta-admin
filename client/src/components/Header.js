@@ -23,7 +23,7 @@ const Header = ({ onMenuClick }) => {
         return;
       }
   
-      const response = await axios.get('http://localhost:5000/api/users/profile', {
+      const response = await axios.get('http://13.203.91.35:5000/api/users/profile', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },

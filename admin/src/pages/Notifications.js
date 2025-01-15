@@ -24,7 +24,7 @@ const Notifications = () => {
 
   const fetchNotifications = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/notifications');
+      const response = await fetch('http://13.203.91.35:5000/api/notifications');
       if (!response.ok) throw new Error('Failed to fetch notifications');
       const data = await response.json();
       setNotificationsData(data);
@@ -38,8 +38,8 @@ const Notifications = () => {
     try {
       const method = selectedNotification._id ? 'PUT' : 'POST';
       const url = selectedNotification._id
-        ? `http://localhost:5000/api/notifications/${selectedNotification._id}`
-        : 'http://localhost:5000/api/notifications';
+        ? `http://13.203.91.35:5000/api/notifications/${selectedNotification._id}`
+        : 'http://13.203.91.35:5000/api/notifications';
 
       const response = await fetch(url, {
         method,
@@ -58,7 +58,7 @@ const Notifications = () => {
 
   const handleDeleteNotification = async () => {
     try {
-      await fetch(`http://localhost:5000/api/notifications/${selectedNotification._id}`, {
+      await fetch(`http://13.203.91.35:5000/api/notifications/${selectedNotification._id}`, {
         method: 'DELETE',
       });
       fetchNotifications();

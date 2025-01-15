@@ -28,7 +28,7 @@ const AddPointsPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/users/add-points',
+        'http://13.203.91.35:5000/api/users/add-points',
         {
           points: parseInt(points),
         },

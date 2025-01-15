@@ -26,7 +26,7 @@
 
 
     useEffect(() => {
-      axios.get('http://localhost:5000/api/markets')
+      axios.get('http://13.203.91.35:5000/api/markets')
         .then(response => {
           const sanitizedData = response.data.map(item => ({
             name: item.name || 'Unknown',

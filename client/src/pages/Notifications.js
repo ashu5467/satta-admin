@@ -9,7 +9,7 @@ const Notifications = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/notifications", {
+        const response = await fetch("http://13.203.91.35:5000/api/notifications", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

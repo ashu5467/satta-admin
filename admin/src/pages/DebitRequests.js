@@ -26,7 +26,7 @@ const DebitRequests = () => {
 
   const fetchRequests = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/transactions/debit-request");
+      const response = await fetch("http://13.203.91.35:5000/api/transactions/debit-request");
       if (!response.ok) throw new Error("Failed to fetch requests");
       const data = await response.json();
 
@@ -50,8 +50,8 @@ const DebitRequests = () => {
       // Make sure to include user and mobile from state
       const method = selectedRequest._id ? "PUT" : "POST";
       const url = selectedRequest._id
-        ? `http://localhost:5000/api/transactions/debit-request/${selectedRequest._id}`
-        : "http://localhost:5000/api/transactions/debit-request";
+        ? `http://13.203.91.35:5000/api/transactions/debit-request/${selectedRequest._id}`
+        : "http://13.203.91.35:5000/api/transactions/debit-request";
 
       // Ensure selectedRequest contains user and mobile values
       const updatedRequest = {
@@ -81,7 +81,7 @@ const DebitRequests = () => {
 
   const handleDeleteRequest = async () => {
     try {
-      await fetch(`http://localhost:5000/api/transactions/debit-request/${selectedRequest._id}`, {
+      await fetch(`http://13.203.91.35:5000/api/transactions/debit-request/${selectedRequest._id}`, {
         method: "DELETE",
       });
       fetchRequests();

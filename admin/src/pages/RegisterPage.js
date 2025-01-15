@@ -41,7 +41,7 @@ const RegisterPage = () => {
   
     try {
       // Make a POST request to the backend
-      const response = await axios.post("http://localhost:5000/api/admins/signup", userData);
+      const response = await axios.post("http://13.203.91.35:5000/api/admins/signup", userData);
   
       // If registration is successful
       if (response.status === 200) {

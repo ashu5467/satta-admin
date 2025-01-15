@@ -29,7 +29,7 @@ const SignupPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/users/signup', formData);
+      const response = await axios.post('http://13.203.91.35:5000/api/users/signup', formData);
       if (response.status === 201) {
         alert('Signup successful! You can now log in.');
         navigate('/login'); // Redirect to login page after successful signup

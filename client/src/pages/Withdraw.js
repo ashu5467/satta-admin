@@ -17,7 +17,7 @@ const Withdraw = () => {
   
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users/profile', {
+        const response = await fetch('http://13.203.91.35:5000/api/users/profile', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const Withdraw = () => {
       console.log('Data to be sent:', data);
 
       try {
-        const response = await fetch('http://localhost:5000/api/transactions/debit-request', {
+        const response = await fetch('http://13.203.91.35:5000/api/transactions/debit-request', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

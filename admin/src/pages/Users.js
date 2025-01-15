@@ -36,7 +36,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users');
+      const response = await fetch('http://13.203.91.35:5000/api/users');
       if (!response.ok) throw new Error('Failed to fetch users');
       const data = await response.json();
       setUsersData(data);
@@ -56,8 +56,8 @@ const Users = () => {
     try {
       const method = selectedUser._id ? 'PUT' : 'POST';
       const url = selectedUser._id
-        ? `http://localhost:5000/api/users/${selectedUser._id}`
-        : 'http://localhost:5000/api/users';
+        ? `http://13.203.91.35:5000/api/users/${selectedUser._id}`
+        : 'http://13.203.91.35:5000/api/users';
 
       const response = await fetch(url, {
         method,
@@ -94,7 +94,7 @@ const Users = () => {
 
   const handleDeleteUser = async () => {
     try {
-      await fetch(`http://localhost:5000/api/users/${selectedUser._id}`, {
+      await fetch(`http://13.203.91.35:5000/api/users/${selectedUser._id}`, {
         method: 'DELETE',
       });
       fetchUsers();
@@ -131,7 +131,7 @@ const Users = () => {
   const handleSaveRates = async () => {
     const updatedUser = { ...selectedUser, ...rateModalData };
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${selectedUser._id}`, {
+      const response = await fetch(`http://13.203.91.35:5000/api/users/${selectedUser._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedUser),

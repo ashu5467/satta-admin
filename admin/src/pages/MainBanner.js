@@ -12,7 +12,7 @@ const MainBanner = () => {
 
   const fetchBanner = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/banner/get', {
+      const response = await axios.get('http://13.203.91.35:5000/api/banner/get', {
         responseType: 'blob', // Ensure we get the binary image data
       });
 
@@ -38,7 +38,7 @@ const MainBanner = () => {
       formData.append('banner', selectedImage);
 
       try {
-        await axios.post('http://localhost:5000/api/banner/upload', formData, {
+        await axios.post('http://13.203.91.35:5000/api/banner/upload', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 

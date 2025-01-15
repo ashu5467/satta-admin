@@ -18,7 +18,7 @@ const CheckBusiness = () => {
 
   const fetchData = async (date) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/businesses?date=${date}`);
+      const response = await fetch(`http://13.203.91.35:5000/api/businesses?date=${date}`);
       if (!response.ok) throw new Error('Failed to fetch businesses data');
       const data = await response.json();
 

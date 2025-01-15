@@ -25,7 +25,7 @@ const LoginPage = ({ setAuthenticated }) => {
 
     try {
       // Make a POST request to the backend to check the credentials
-      const response = await axios.post("http://localhost:5000/api/admins/login", loginData);
+      const response = await axios.post("http://13.203.91.35:5000/api/admins/login", loginData);
 
       // If login is successful
       if (response.status === 200) {

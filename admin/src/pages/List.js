@@ -16,7 +16,7 @@ const List = () => {
 
   // Fetch markets data from API on component mount
   useEffect(() => {
-    axios.get('http://localhost:5000/api/markets')
+    axios.get('http://13.203.91.35:5000/api/markets')
       .then(response => {
         setTableData(response.data);
       })
@@ -68,7 +68,7 @@ const List = () => {
   const handleAddMarket = () => {
     if (newMarket.name && newMarket.open && newMarket.close && newMarket.status) {
       
-      axios.post('http://localhost:5000/api/markets', newMarket)
+      axios.post('http://13.203.91.35:5000/api/markets', newMarket)
         .then(response => {
           setTableData([...tableData, response.data]);
           setNewMarket({ name: '', open: '', close: '', days: '', status: '' });
@@ -111,7 +111,7 @@ const List = () => {
     console.log("Updating market with ID:", newMarket._id);  // Log the _id
   
     if (newMarket.name && newMarket.open && newMarket.close && newMarket.status) {
-      axios.put(`http://localhost:5000/api/markets/${newMarket._id}`, newMarket)  // Use _id in the URL
+      axios.put(`http://13.203.91.35:5000/api/markets/${newMarket._id}`, newMarket)  // Use _id in the URL
         .then(response => {
           console.log("Market updated:", response.data);
           setTableData(tableData.map(item => item._id === newMarket._id ? response.data : item));  // Use _id for matching
@@ -130,7 +130,7 @@ const List = () => {
 
   // Delete market via API
   const handleDeleteMarket = (id) => {
-    axios.delete(`http://localhost:5000/api/markets/${id}`)
+    axios.delete(`http://13.203.91.35:5000/api/markets/${id}`)
       .then(() => {
         setTableData(tableData.filter((item) => item._id !== id));
       })

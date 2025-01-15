@@ -15,7 +15,7 @@ const Statements = () => {
         return;
       }
   
-      const response = await axios.get("http://localhost:5000/api/users/transactions", {
+      const response = await axios.get("http://13.203.91.35:5000/api/users/transactions", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

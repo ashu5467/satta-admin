@@ -23,7 +23,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchNewUsers = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users/today-signups');
+        const response = await fetch('http://13.203.91.35:5000/api/users/today-signups');
         const data = await response.json();
         setNewUserCount(data.todaySignups);
       } catch (error) {
@@ -39,7 +39,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchMarkets = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/markets');
+        const response = await fetch('http://13.203.91.35:5000/api/markets');
         const data = await response.json();
         setMarketData(data); // Store the fetched market data
       } catch (error) {
@@ -73,7 +73,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchNewDebitRequests = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/transactions/debit-request-today'); // API endpoint to fetch new debit requests for today
+        const response = await fetch('http://13.203.91.35:5000/api/transactions/debit-request-today'); // API endpoint to fetch new debit requests for today
         const data = await response.json();
         
         // Access requestCount from the first object in newDebitRequests array
@@ -91,7 +91,7 @@ const Dashboard = () => {
 
   const handleNewDebitRequestsClick = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/transactions/debit-request');
+      const response = await fetch('http://13.203.91.35:5000/api/transactions/debit-request');
       const data = await response.json();
       console.log(data);  // Check the API response here
   
@@ -113,7 +113,7 @@ const Dashboard = () => {
 
   const handleNewUsersClick = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users/today-signups');
+      const response = await fetch('http://13.203.91.35:5000/api/users/today-signups');
       const data = await response.json();
       console.log(data); // Debug API response
       setNewUsers(data.newUsers || []); // Safely access newUsers
@@ -130,7 +130,7 @@ const Dashboard = () => {
     const today = new Date().toISOString().split('T')[0];
     if (openPatti && jodi && closePatti && resultDate === today) {
       try {
-        const response = await fetch(`http://localhost:5000/api/markets/${selectedMarket._id}/result`, {
+        const response = await fetch(`http://13.203.91.35:5000/api/markets/${selectedMarket._id}/result`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ resultDate, openPatti, jodi, closePatti }),

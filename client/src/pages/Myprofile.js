@@ -42,7 +42,7 @@ const MyProfile = () => {
       return;
     }
   
-    axios.get('http://localhost:5000/api/users/profile', {
+    axios.get('http://13.203.91.35:5000/api/users/profile', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`, // Pass the token in headers
       },
@@ -97,7 +97,7 @@ const MyProfile = () => {
 
 
   const fetchProfileData = () => {
-    axios.get('http://localhost:5000/api/users/profile', {
+    axios.get('http://13.203.91.35:5000/api/users/profile', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`,
       },
@@ -124,7 +124,7 @@ const MyProfile = () => {
       points: personalDetails.points,
     };
   
-    axios.put('http://localhost:5000/api/users/profile', updatedDetails, {
+    axios.put('http://13.203.91.35:5000/api/users/profile', updatedDetails, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`,
       },
@@ -144,7 +144,7 @@ const MyProfile = () => {
   
 
   const savePaymentDetails = () => {
-    axios.put('http://localhost:5000/api/users/profile/payment', paymentDetails, {
+    axios.put('http://13.203.91.35:5000/api/users/profile/payment', paymentDetails, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`,
       },

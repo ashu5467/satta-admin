@@ -15,7 +15,7 @@ const ForgotPasswordPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/users/forgot-password', { mobile });
+      const response = await axios.post('http://13.203.91.35:5000/api/users/forgot-password', { mobile });
       
       if (response.status === 200) {
         setMessage('Password reset link sent successfully!');

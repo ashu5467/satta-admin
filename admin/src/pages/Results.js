@@ -20,7 +20,7 @@ const Results = () => {
   // Fetch all results from MongoDB
   const fetchResults = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/results');
+      const response = await axios.get('http://13.203.91.35:5000/api/results');
       setResultData(response.data);
     } catch (error) {
       console.error('Error fetching results:', error);
@@ -63,14 +63,14 @@ const Results = () => {
     try {
       if (editingId) {
         // Update existing result
-        const response = await axios.put(`http://localhost:5000/api/results/${editingId}`, newResult);
+        const response = await axios.put(`http://13.203.91.35:5000/api/results/${editingId}`, newResult);
         const updatedResults = resultData.map((item) =>
           item._id === editingId ? response.data : item
         );
         setResultData(updatedResults);
       } else {
         // Add new result
-        const response = await axios.post('http://localhost:5000/api/results', newResult);
+        const response = await axios.post('http://13.203.91.35:5000/api/results', newResult);
         setResultData([...resultData, response.data]);
       }
 
@@ -86,7 +86,7 @@ const Results = () => {
   // Delete result
   const handleDeleteResult = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/results/${id}`);
+      await axios.delete(`http://13.203.91.35:5000/api/results/${id}`);
       setResultData(resultData.filter((item) => item._id !== id));
     } catch (error) {
       console.error('Error deleting result:', error);
