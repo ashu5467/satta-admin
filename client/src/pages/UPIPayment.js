@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import upi from '../assets/upi.jpeg'; // Ensure the path to the UPI image is correct
-import { QRCodeSVG } from 'qrcode.react'; // Import QRCodeSVG
+import { QRCodeSVG } from 'qrcode.react';
 
 const UPIPayment = () => {
   const location = useLocation();
@@ -15,8 +15,6 @@ const UPIPayment = () => {
   // Fixed receiver UPI ID
   const receiverUpiId = '7028418945@ybl'; // This is the fixed UPI ID for the receiver
 
-  // Local state to handle UPI ID input from the user (sender's UPI ID)
-  const [upiId, setUpiId] = useState('');
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -29,33 +27,31 @@ const UPIPayment = () => {
 
   // Function to handle the payment when the button is clicked
   const handlePayment = () => {
-    if (!upiId) {
-      alert("Please enter a valid UPI ID.");
-      return; // Prevent proceeding without UPI ID
-    }
-
     // Generate the UPI payment link with the fixed receiver's UPI ID
-    const upiLink = generateUPILink(upiId, payeeName, points, note, receiverUpiId);
+    const upiLink = generateUPILink(payeeName, points, note, receiverUpiId);
 
-    // If the user is on a mobile device, redirect to the UPI app
+    // Redirect to the UPI app if on a mobile device
     if (isMobile) {
       window.location.href = upiLink;
     } else {
-      // For desktop, we show the link or a QR code
+      // Show a QR code or provide the link for desktop users
       alert('You are on a desktop. Please use your mobile to scan the QR code.');
     }
   };
 
-  // Function to generate the UPI link with the details entered by the user
-  const generateUPILink = (senderUpiId, name, amount, note, receiverUpiId) => {
+  // Function to generate the UPI link
+  const generateUPILink = (name, amount, note, receiverUpiId) => {
     return `upi://pay?pa=${receiverUpiId}&pn=${name}&am=${amount}&tn=${encodeURIComponent(
       note
-    )}&cu=INR&payee=${encodeURIComponent(senderUpiId)}`;
+    )}&cu=INR`;
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 shadow-md w-96 text-center">
+    <div
+      className="min-h-screen flex items-center justify-center bg-gray-100 p-4"
+      style={{ fontFamily: 'Segoe UI' }}
+    >
+      <div className="bg-white p-6 shadow-md rounded-md w-full max-w-md text-center">
         {/* UPI Image */}
         <img
           src={upi}
@@ -66,22 +62,8 @@ const UPIPayment = () => {
         <p className="text-gray-700 mb-2">
           <strong>Amount:</strong> {points} INR
         </p>
-        <p className="text-gray-700 mb-2">
-          <strong>Payee Name:</strong> {payeeName}
-        </p>
-
-        {/* UPI ID Input: User can enter their own UPI ID (sender's UPI) */}
-        <input
-          type="text"
-          placeholder="Enter your UPI ID"
-          value={upiId}
-          onChange={(e) => setUpiId(e.target.value)}
-          className="w-full p-2 mb-4 border border-gray-300 rounded-md"
-        />
-
-        {/* Display the entered UPI ID */}
         <p className="text-gray-700 mb-4">
-          <strong>Your UPI ID:</strong> {upiId || 'Not entered yet'}
+          <strong>Payee Name:</strong> {payeeName}
         </p>
 
         {/* Button to trigger the payment process */}
@@ -93,10 +75,10 @@ const UPIPayment = () => {
         </button>
 
         {/* QR Code or Payment Link for Desktop Users */}
-        {!isMobile && upiId && (
+        {!isMobile && (
           <div className="mt-4">
             <p className="text-gray-700 mb-2">Scan the QR code or use your mobile to pay:</p>
-            <QRCodeSVG value={generateUPILink(upiId, payeeName, points, note, receiverUpiId)} />
+            <QRCodeSVG value={generateUPILink(payeeName, points, note, receiverUpiId)} />
           </div>
         )}
 
