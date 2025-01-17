@@ -13,51 +13,72 @@ const AddPointsPage = () => {
     999, 1149, 1150, 1299, 1599, 1999, 2999,
   ];
 
-  const handleAddPoints = async () => {
+  // const handleAddPoints = async () => {
+  //   if (!points || isNaN(points) || parseInt(points) <= 0) {
+  //     setError("Please enter a valid number of points.");
+  //     return;
+  //   }
+
+  //   const token = localStorage.getItem("authToken");
+
+  //   if (!token) {
+  //     setError("You must be logged in to add points.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://13.203.91.35:5000/api/users/add-points",
+  //       {
+  //         points: parseInt(points),
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       setSuccessMessage("Points added successfully!");
+  //       setError(null);
+  //       setPoints("");
+
+  //       // Redirect to the UPI Payment page
+  //       setTimeout(() => {
+  //         navigate("/upi-payment", { state: { points } }); // Pass points via state
+  //       }, 2000);
+  //     } else {
+  //       setError("Failed to add points. Please try again.");
+  //     }
+  //   } catch (err) {
+  //     console.error("Error adding points:", err);
+  //     setError("An error occurred. Please try again later.");
+  //   }
+  // };
+
+
+
+  const handleAddPoints = () => {
     if (!points || isNaN(points) || parseInt(points) <= 0) {
       setError("Please enter a valid number of points.");
       return;
     }
-
+  
     const token = localStorage.getItem("authToken");
-
+  
     if (!token) {
       setError("You must be logged in to add points.");
       return;
     }
-
-    try {
-      const response = await axios.post(
-        "http://13.203.91.35:5000/api/users/add-points",
-        {
-          points: parseInt(points),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        setSuccessMessage("Points added successfully!");
-        setError(null);
-        setPoints("");
-
-        // Redirect to the UPI Payment page
-        setTimeout(() => {
-          navigate("/upi-payment", { state: { points } }); // Pass points via state
-        }, 2000);
-      } else {
-        setError("Failed to add points. Please try again.");
-      }
-    } catch (err) {
-      console.error("Error adding points:", err);
-      setError("An error occurred. Please try again later.");
-    }
+  
+    // Navigate to the UPI Payment page with points as a parameter
+    navigate("/upi-payment", { state: { points } });
   };
 
+  
+  
   const handleOptionClick = (value) => {
     setPoints(value);
     setError(null);

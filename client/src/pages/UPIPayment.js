@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
+import axios from "axios";
+
 
 const UPIPayment = () => {
   const location = useLocation();
@@ -25,18 +27,52 @@ const UPIPayment = () => {
   }, []);
 
   // Function to handle the payment when the button is clicked
-  const handlePayment = () => {
-    // Generate the UPI payment link with the fixed receiver's UPI ID
+  const handlePayment = async () => {
     const upiLink = generateUPILink(payeeName, points, note, receiverUpiId);
-
-    // Redirect to the UPI app if on a mobile device
+  
     if (isMobile) {
+      // Redirect to the UPI app
       window.location.href = upiLink;
     } else {
-      // Show a QR code or provide the link for desktop users
-      alert('You are on a desktop. Please use your mobile to scan the QR code.');
+      // For desktop, just display the QR code
+      alert("You are on a desktop. Please use your mobile to scan the QR code.");
+    }
+  
+    // Simulate a confirmation from the user (you can replace this with actual payment validation)
+    const isPaymentSuccessful = window.confirm(
+      "Has the payment been successfully completed?"
+    );
+  
+    if (isPaymentSuccessful) {
+      const token = localStorage.getItem("authToken");
+  
+      try {
+        const response = await axios.post(
+          "http://13.203.91.35:5000/api/users/add-points",
+          { points },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+  
+        if (response.status === 200) {
+          alert("Points added successfully!");
+          navigate("/dashboard"); // Redirect to dashboard or any other page
+        } else {
+          alert("Failed to add points. Please try again.");
+        }
+      } catch (err) {
+        console.error("Error adding points:", err);
+        alert("An error occurred. Please try again later.");
+      }
+    } else {
+      alert("Payment was not completed. Please try again.");
     }
   };
+  
 
   // Function to generate the UPI link
   const generateUPILink = (name, amount, note, receiverUpiId) => {
