@@ -1,6 +1,6 @@
 // routes/userRoutes.js
 const express = require('express');
-const {getTransactions, addTransaction, getUserProfile, updateProfile, updatePaymentDetails, signupUser, loginUser, getUsers, createUser, updateUser, deleteUser,addPoints,getTodaySignups } = require('../controllers/userController');
+const {updateGameRates, getTransactions, addTransaction, getUserProfile, updateProfile, updatePaymentDetails, signupUser, loginUser, getUsers, createUser, updateUser, deleteUser,addPoints,getTodaySignups } = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -19,4 +19,5 @@ router.post('/signup', signupUser);
 router.post('/login', loginUser);
 router.post('/add-points', authenticate, addPoints);
 router.get('/today-signups', getTodaySignups);
+router.put('/:id/gameRates', updateGameRates);
 module.exports = router;

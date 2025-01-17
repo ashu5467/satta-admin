@@ -360,4 +360,34 @@ const getTodaySignups = async (req, res) => {
 
 
 
-module.exports = {getTodaySignups, addPoints,getTransactions, addTransaction, getUserProfile, updateProfile, updatePaymentDetails, loginUser, signupUser, getUsers, createUser, updateUser, deleteUser };
+// Update game rates for a user
+const updateGameRates = async (req, res) => {
+  const { id } = req.params; // Extract user ID from URL params
+  const { gameRates } = req.body; // { Single, Jodi, etc. }
+
+  try {
+    // Find the user by ID
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update the game rates for the user
+    user.gameRates = { ...user.gameRates, ...gameRates };
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({ message: 'Game rates updated successfully', user });
+  } catch (err) {
+    console.error('Error updating game rates:', err);
+    res.status(500).json({ message: 'Error updating game rates', error: err.message });
+  }
+};
+
+
+
+
+
+module.exports = {updateGameRates, getTodaySignups, addPoints,getTransactions, addTransaction, getUserProfile, updateProfile, updatePaymentDetails, loginUser, signupUser, getUsers, createUser, updateUser, deleteUser };

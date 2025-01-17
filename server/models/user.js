@@ -31,6 +31,19 @@ const userSchema = new mongoose.Schema({
       balance: { type: Number, required: true }, // Remaining balance after the transaction
     },
   ],
+
+
+
+   // Game rates for each user
+   gameRates: {
+    Single: { type: Number, default: 9.50 },
+    Jodi: { type: Number, default: 95.00 },
+    SinglePana: { type: Number, default: 12.00 },
+    DoublePana: { type: Number, default: 22.00 },
+    TriplePana: { type: Number, default: 32.00 },
+    HalfSangam: { type: Number, default: 150.00 },
+    FullSangam: { type: Number, default: 1000.00 },
+  },
   
 });
 

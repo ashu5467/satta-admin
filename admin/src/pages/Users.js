@@ -129,27 +129,30 @@ const Users = () => {
   };
 
   const handleSaveRates = async () => {
-    const updatedUser = { ...selectedUser, ...rateModalData };
     try {
-      const response = await fetch(`http://13.203.91.35:5000/api/users/${selectedUser._id}`, {
+      const response = await fetch(`http://13.203.91.35:5000/api/users/${selectedUser._id}/gameRates`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedUser),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          gameRates: rateModalData,
+        }),
       });
-
+  
       const responseData = await response.json();
       if (!response.ok) {
-        throw new Error(responseData.message || 'Failed to update rates');
+        throw new Error(responseData.message || 'Failed to update game rates');
       }
-
+  
       fetchUsers();
       closeModal();
     } catch (error) {
-      console.error('Error saving rates:', error);
+      console.error('Error saving rates:', error.message);
       alert(error.message);
     }
   };
-
+  
   const handleAddUser = () => {
     setSelectedUser({});
     setIsUserModalOpen(true);
