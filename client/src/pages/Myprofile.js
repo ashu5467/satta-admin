@@ -189,7 +189,7 @@ const MyProfile = () => {
            {/* name*/}
            <div className="flex items-center mb-4">
             <FaCalendarAlt className="mr-2 text-blue-500" />
-            <span className="font-medium text-white">name </span>
+            <span className="font-medium text-white">Name: </span>
             {isEditingPersonal ? (
               <input
                 type="text"

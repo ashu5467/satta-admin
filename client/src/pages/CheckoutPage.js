@@ -108,8 +108,9 @@ const CheckoutPage = () => {
 
       {/* Market and Satta Details */}
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-white">Market: {market}</h2>
-        <h2 className="text-lg font-semibold text-white">Satta: {sattaName}</h2>
+      <h2 className="text-lg font-semibold text-white">Game: {market.toUpperCase()}</h2>
+
+        {/* <h2 className="text-lg font-semibold text-white">Satta: {sattaName}</h2> */}
         <h3 className="text-lg text-white mt-2">Total Points: Rs {totalPoints}</h3>
       </div>
 

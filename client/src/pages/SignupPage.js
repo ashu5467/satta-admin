@@ -64,7 +64,7 @@ const SignupPage = () => {
           placeholder="Name"
           className="flex-grow bg-transparent outline-none text-white placeholder-white"
         />
-        <FontAwesomeIcon icon={faUser} className="ml-3 text-white" />
+        <FontAwesomeIcon icon={faUser} className="ml-[-6px] text-white" />
       </div>
 
       {/* Mobile Number Input */}
@@ -77,7 +77,7 @@ const SignupPage = () => {
           placeholder="Mobile Number"
           className="flex-grow bg-transparent outline-none text-white placeholder-white"
         />
-        <FontAwesomeIcon icon={faMobileAlt} className="ml-3 text-white" />
+        <FontAwesomeIcon icon={faMobileAlt} className="ml-[-6px] text-white" />
       </div>
 
       {/* Password Input */}
@@ -90,7 +90,7 @@ const SignupPage = () => {
           placeholder="Password"
           className="flex-grow bg-transparent outline-none text-white placeholder-white"
         />
-        <FontAwesomeIcon icon={faLock} className="ml-3 text-white" />
+        <FontAwesomeIcon icon={faLock} className="ml-[-6px] text-white" />
       </div>
 
       {/* Confirm Password Input */}
@@ -103,7 +103,7 @@ const SignupPage = () => {
           placeholder="Confirm Password"
           className="flex-grow bg-transparent outline-none text-white placeholder-white"
         />
-        <FontAwesomeIcon icon={faKey} className="ml-3 text-white" />
+        <FontAwesomeIcon icon={faKey} className="ml-[-6px] text-white" />
       </div>
 
       {/* Signup Button */}

@@ -57,7 +57,7 @@ const LoginPage = ({ onLogin }) => { // Receive the onLogin function from App.js
           placeholder="Mobile Number"
           className="flex-grow bg-transparent outline-none text-white placeholder-white"
         />
-        <FontAwesomeIcon icon={faMobileAlt} className="ml-3 text-white" />
+        <FontAwesomeIcon icon={faMobileAlt} className="ml-[-6px] text-white flex-shrink-0" />
       </div>
 
       <div className="mb-4 flex items-center w-64 border rounded-full px-4 py-2 bg-transparent backdrop-blur-none">
@@ -69,7 +69,7 @@ const LoginPage = ({ onLogin }) => { // Receive the onLogin function from App.js
           placeholder="Password"
           className="flex-grow bg-transparent outline-none text-white placeholder-white"
         />
-        <FontAwesomeIcon icon={faLock} className="ml-3 text-white" />
+        <FontAwesomeIcon icon={faLock} className="ml-[-6px]  text-white flex shrink-0" />
       </div>
 
       <button
