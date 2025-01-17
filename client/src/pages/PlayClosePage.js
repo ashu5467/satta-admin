@@ -192,6 +192,393 @@ const PlayClosePage = () => {
            
         }
 
+        if (market.toLowerCase() === 'sp motors') {
+          const spMotorsMapping = {
+            1234: ["123", "124", "134", "234"],
+            12345: ["123", "124", "125", "134", "135", "145", "234", "235", "245", "345"],
+            123456: [
+              "123", "124", "125", "126", "134", "135", "136", "145", "146", "156",
+              "234", "235", "236", "245", "246", "256", "345", "346", "356", "456"
+            ],
+            1234567: [
+              "123", "124", "125", "126", "127", "134", "135", "136", "137", "145", "146", "147", 
+              "156", "157", "167", "234", "235", "236", "237", "245", "246", "247", "256", "257", 
+              "267", "345", "346", "347", "356", "357", "367", "456", "467", "567"
+            ],
+            12345678: [
+              "123", "124", "125", "126", "127", "128", "134", "135", "136", "137", "138", "145",
+              "146", "147", "148", "156", "157", "158", "167", "168", "178", "234", "235", "236",
+              "237", "238", "245", "246", "247", "248", "256", "257", "258", "267", "268", "278",
+              "345", "346", "347", "348", "356", "357", "358", "367", "368", "378", "456", "457",
+              "458", "467", "468", "478", "567", "568", "578", "678"
+            ],
+            123456789: [
+              "123", "124", "125", "126", "127", "128", "129", "134", "135", "136", "137", "138", "139",
+              "145", "146", "147", "148", "149", "156", "157", "158", "159", "167", "168", "169", "178", 
+              "179", "189", "234", "235", "236", "237", "238", "239", "245", "246", "247", "248", "249",
+              "256", "257", "258", "259", "267", "268", "269", "278", "279", "289", "345", "346", "347",
+              "348", "349", "356", "357", "358", "359", "367", "368", "369", "378", "379", "389", "456",
+              "457", "458", "459", "467", "468", "469", "478", "479", "489", "567", "568", "569", "578",
+              "579", "589", "678", "679", "689", "789"
+            ]
+          };
+        
+          if (!isNaN(biddingNumber) && ["1234", "12345", "123456", "1234567", "12345678", "123456789"].includes(biddingNumber)) {
+            const digit = parseInt(biddingNumber, 10);
+            const spMotorNumbers = spMotorsMapping[digit] || [];
+            spMotorNumbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid value: 1234, 12345, 123456, 1234567, 12345678, or 123456789 for SP Motor game.');
+            return;
+          }
+        }
+
+
+        if (market.toLowerCase() === 'dp motors') {
+          const dpMotorsMapping = {
+            1234: [
+              "112", "113", "114", "122", "133", "144", "223", "224", "233", "244", "334", "344"
+            ],
+            12345: [
+              "112", "113", "114", "115", "122", "133", "144", "155", "223", "224", "225", 
+              "233", "244", "255", "334", "335", "344", "355", "445", "455"
+            ],
+            123456: [
+              "112", "113", "114", "115", "116", "122", "133", "144", "155", "166", "223", 
+              "224", "225", "226", "233", "244", "255", "266", "334", "336", "344", "355", 
+              "366", "445", "446", "455", "466", "556", "566"
+            ],
+            1234567: [
+              "112", "113", "114", "115", "116", "117", "122", "133", "144", "155", "166", 
+              "177", "223", "224", "225", "226", "227", "233", "244", "255", "266", "277", 
+              "334", "335", "336", "337", "344", "355", "366", "377", "445", "446", "447", 
+              "455", "466", "477", "556", "557", "566", "577", "667", "677"
+            ],
+            12345678: [
+              "112", "113", "114", "115", "116", "117", "118", "122", "133", "144", "155", 
+              "166", "177", "188", "223", "224", "225", "226", "227", "228", "233", "244", 
+              "255", "266", "277", "288", "334", "335", "336", "337", "338", "344", "355", 
+              "366", "377", "388", "445", "446", "447", "448", "455", "466", "477", "488", 
+              "556", "557", "558", "566", "577", "588", "667", "668", "677", "688", "778", 
+              "788"
+            ],
+            123456789: [
+              "112", "113", "114", "115", "116", "117", "118", "119", "122", "133", "144", 
+              "155", "166", "177", "188", "199", "223", "224", "225", "226", "227", "228", 
+              "229", "233", "244", "255", "266", "277", "288", "299", "334", "335", "336", 
+              "337", "338", "339", "344", "355", "366", "377", "388", "399", "445", "446", 
+              "447", "448", "449", "455", "466", "477", "488", "499", "556", "557", "558", 
+              "559", "566", "577", "588", "599", "667", "668", "669", "677", "688", "699", 
+              "778", "779", "889", "899"
+            ]
+          };
+          if (!isNaN(biddingNumber) && ["1234", "12345", "123456", "1234567", "12345678", "123456789"].includes(biddingNumber)) {
+            const digit = parseInt(biddingNumber, 10);
+            const dpMotorNumbers = dpMotorsMapping[digit] || [];
+            dpMotorNumbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid value: 1234, 12345, 123456, 1234567, 12345678, or 123456789 for SP Motor game.');
+            return;
+          }
+        }
+        
+    
+  
+  
+        if (market.toLowerCase() === 'sp dp motors') {
+          const spdpMotorsMapping = {
+            1234: [
+              "123", "124", "134", "234", "112", "113", "114", "122", "133", "144", "223", "224", "233", "244", "334", "344"
+            ],
+            12345: [
+              "123", "124", "125", "134", "135", "145", "234", "235", "245", "345", "112", "113", "114", "115", "122", 
+              "133", "144", "155", "223", "224", "225", "233", "244", "255", "334", "335", "344", "355", "445", "455"
+            ],
+            123456: [
+              "123", "124", "125", "126", "134", "135", "136", "145", "146", "156", "234", "235", "236", "245", "246", 
+              "256", "345", "346", "356", "456", "112", "113", "114", "115", "116", "122", "133", "144", "155", "166", 
+              "223", "224", "225", "226", "233", "244", "255", "266", "334", "335", "336", "344", "355", "366", "445", 
+              "446", "455", "466", "556", "566"
+            ],
+            1234567: [
+              "123", "124", "125", "126", "127", "134", "135", "136", "137", "145", "146", "147", "156", "157", "167", 
+              "234", "235", "236", "237", "245", "246", "247", "256", "257", "267", "345", "346", "347", "356", "357", 
+              "367", "456", "457", "467", "567", "112", "113", "114", "115", "116", "117", "122", "133", "144", "155", 
+              "166", "177", "223", "224", "225", "226", "227", "233", "244", "255", "266", "277", "334", "335", "336", 
+              "337", "344", "355", "366", "377", "445", "446", "447", "455", "466", "477", "556", "557", "566", "577", 
+              "667", "677"
+            ],
+            12345678: [
+              "123", "124", "125", "126", "127", "128", "134", "135", "136", "137", "138", "145", "146", "147", "148", 
+              "156", "157", "158", "167", "168", "178", "234", "235", "236", "237", "238", "245", "246", "247", "248", 
+              "256", "257", "258", "267", "268", "278", "345", "346", "347", "348", "356", "357", "358", "367", "368", 
+              "378", "456", "457", "458", "467", "468", "478", "567", "568", "578", "678", "112", "113", "114", "115", 
+              "116", "117", "118", "122", "133", "144", "155", "166", "177", "188", "223", "224", "225", "226", "227", 
+              "228", "233", "244", "255", "266", "277", "288", "334", "335", "336", "337", "338", "344", "355", "366", 
+              "377", "388", "445", "446", "447", "448", "455", "466", "477", "488", "556", "557", "558", "566", "577", 
+              "588", "667", "668", "677", "688", "778", "788"
+            ],
+            123456789: [
+              "123", "124", "125", "126", "127", "128", "129", "134", "135", "136", "137", "138", "139", "145", "146", 
+              "147", "148", "149", "156", "157", "158", "159", "167", "168", "169", "178", "189", "234", "235", "236", 
+              "237", "238", "239", "245", "246", "247", "249", "256", "257", "258", "259", "267", "268", "269", "278", 
+              "279", "289", "345", "346", "347", "348", "349", "356", "357", "358", "359", "367", "368", "369", "378", 
+              "379", "389", "456", "457", "458", "459", "467", "468", "469", "478", "479", "489", "567", "568", "569", 
+              "578", "579", "589", "678", "679", "689", "789", "112", "113", "114", "115", "116", "117", "118", "119", 
+              "122", "133", "144", "155", "166", "177", "188", "199", "223", "224", "225", "226", "227", "228", "229", 
+              "233", "244", "255", "266", "277", "288", "299", "334", "335", "336", "337", "338", "339", "344", "355", 
+              "366", "377", "388", "399", "445", "446", "447", "448", "449", "455", "466", "477", "488", "499", "556", 
+              "557", "558", "559", "566", "577", "588", "599", "667", "668", "669", "677", "688", "699", "778", "779", 
+              "788", "799", "889", "899"
+            ]
+          };
+          
+          if (!isNaN(biddingNumber) && ["1234", "12345", "123456", "1234567", "12345678", "123456789"].includes(biddingNumber)) {
+            const digit = parseInt(biddingNumber, 10);
+            const spdpMotorNumbers = spdpMotorsMapping[digit] || [];
+            spdpMotorNumbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid value: 1234, 12345, 123456, 1234567, 12345678, or 123456789 for SP Motor game.');
+            return;
+          }
+        }
+  
+  
+  
+  
+        if (market.toLowerCase() === 'pana family') {
+          const panaFamilyMapping = {
+         111: ["111", "116", "166", "666"],
+    112: ["112", "117", "126", "167", "266", "667"],
+    113: ["113", "118", "136", "168", "366", "668"],
+    114: ["114", "119", "146", "169", "466", "669"],
+    115: ["110", "115", "156", "160", "566", "660"],
+    122: ["122", "127", "177", "226", "267", "677"],
+    123: ["123", "128", "137", "178", "236", "268", "367", "678"],
+    124: ["124", "129", "147", "179", "246", "269", "467", "679"],
+    125: ["120", "125", "157", "170", "256", "260", "567", "670"],
+    133: ["133", "138", "188", "336", "368", "688"],
+    134: ["134", "139", "148", "189", "346", "369", "468", "689"],
+    135: ["130", "135", "158", "180", "356", "360", "568", "680"],
+    144: ["144", "149", "199", "446", "469", "699"],
+    145: ["140", "145", "159", "190", "456", "460", "569", "690"],
+    155: ["100", "150", "155", "556", "560", "600"],
+    222: ["222", "227", "277", "777"],
+    223: ["223", "228", "237", "278", "377", "778"],
+    224: ["224", "229", "247", "279", "477", "779"],
+    225: ["220", "225", "257", "270", "577", "770"],
+    233: ["233", "238", "288", "337", "378", "788"],
+    234: ["234", "239", "248", "289", "347", "379", "478", "789"],
+    235: ["230", "235", "258", "280", "357", "370", "578", "780"],
+    244: ["244", "249", "299", "447", "479", "799"],
+    245: ["240", "245", "259", "290", "457", "470", "579", "790"],
+    255: ["200", "250", "255", "557", "570", "700"],
+    333: ["333", "338", "388", "888"],
+    334: ["334", "339", "348", "389", "488", "889"],
+    335: ["330", "335", "358", "380", "588", "880"],
+    344: ["344", "349", "399", "448", "489", "899"],
+    345: ["340", "345", "359", "390", "458", "480", "589", "890"],
+    355: ["300", "350", "355", "558", "580", "800"],
+    444: ["444", "449", "499", "999"],
+    445: ["440", "445", "459", "490", "599", "990"],
+    455: ["400", "450", "455", "559", "590", "900"],
+    555: ["000", "500", "550", "555"]
+          };
+          
+    
+          if (!isNaN(biddingNumber) && biddingNumber.length === 3) {
+            const digit = parseInt(biddingNumber, 10);
+            const panaFamilyNumbers = panaFamilyMapping[digit] || [];
+            panaFamilyNumbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid number for PANA FAMILY game.');
+            return;
+          }
+        }
+
+        if (market.toLowerCase() === 'cht 30') {
+          const cht30Mapping = {
+            1: ["146", "380", "470"],
+            2: ["138", "147", "570"],
+            3: ["148", "247", "580"],
+            4: ["149", "158", "257"],
+            5: ["168", "249", "258"],
+            6: ["169", "259", "358"],
+            7: ["250", "269", "368"],
+            8: ["279", "350", "269"],
+            9: ["270", "360", "469"],
+            0: ["136", "370", "479"]
+          };
+          
+    
+          if (!isNaN(biddingNumber) && biddingNumber.length === 1) {
+            const digit = parseInt(biddingNumber, 10);
+            const cht30Numbers = cht30Mapping[digit] || [];
+            cht30Numbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid single-digit number for CHT 30 market.');
+            return;
+          }
+        }
+  
+        if (market.toLowerCase() === 'cht 40') {
+          const cht40Mapping = {
+            1: ["128", "236", "245","290"],
+            2: ["129", "390", "589","679"],
+            3: ["256", "346", "670","689"],
+            4: ["130", "239", "347","356"],
+            5: ["140", "230", "690","780"],
+            6: ["178", "367", "457","790"],
+            7: ["124", "340", "458","467"],
+            8: ["125", "134", "170","189"],
+            9: ["180", "289", "478","568"],
+            0: ["145", "235", "569","578"]
+          };
+          
+    
+          if (!isNaN(biddingNumber) && biddingNumber.length === 1) {
+            const digit = parseInt(biddingNumber, 10);
+            const cht40Numbers = cht40Mapping[digit] || [];
+            cht40Numbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid single-digit number for CHT 40 game.');
+            return;
+          }
+        }
+    
+  
+  
+  
+        if (market.toLowerCase() === 'cht 50') {
+          const cht50Mapping = {
+            1: ["137", "146", "380", "470", "579"],
+    2: ["138", "147", "246", "480", "570"],
+    3: ["139", "148", "158", "247", "580"],
+    4: ["149", "159", "248", "257", "680"],
+    5: ["159", "168", "249", "258", "357"],
+    6: ["169", "240", "259", "268", "358"],
+    7: ["179", "250", "269", "359", "368"],
+    8: ["260", "279", "350", "369", "468"],
+    9: ["135", "270", "360", "379", "469"],
+    0: ["136", "280", "370", "460", "479"]
+          };
+          
+    
+          if (!isNaN(biddingNumber) && biddingNumber.length === 1) {
+            const digit = parseInt(biddingNumber, 10);
+            const cht50Numbers = cht50Mapping[digit] || [];
+            cht50Numbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid single-digit number for CHT 50 game.');
+            return;
+          }
+        }
+    
+  
+  
+  
+        if (market.toLowerCase() === 'cht 70') {
+          const cht70Mapping = {
+            1: ["128", "236", "245", "290", "489", "560", "678"],
+    2: ["129", "156", "237", "345", "390", "589", "679"],
+    3: ["120", "238", "256", "346", "490", "670", "689"],
+    4: ["130", "167", "239", "347", "356", "590", "789"],
+    5: ["140", "230", "267", "348", "456", "690", "780"],
+    6: ["123", "150", "178", "349", "367", "457", "790"],
+    7: ["124", "160", "278", "340", "458", "467", "890"],
+    8: ["125", "134", "170", "189", "378", "459", "567"],
+    9: ["126", "180", "234", "289", "450", "478", "568"],
+    0: ["127", "145", "190", "235", "389", "569", "578"]
+          };
+          
+    
+          if (!isNaN(biddingNumber) && biddingNumber.length === 1) {
+            const digit = parseInt(biddingNumber, 10);
+            const cht70Numbers = cht70Mapping[digit] || [];
+            cht70Numbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid single-digit number for CHT 70 game.');
+            return;
+          }
+        }
+
+        if (market.toLowerCase() === 'dpt common') {
+          const dptCommonMapping = {
+          0: ["100", "110", "200", "220", "300", "330", "400", "440", "500", "550", "600", "660", "700", "770", "800", "880", "900", "990", "000"],
+          1: ["100", "110", "112", "113", "114", "115", "116", "117", "118", "119", "122", "133", "144", "155", "166", "177", "188", "199", "111"],
+          2: ["112", "122", "200", "220", "223", "224", "225", "226", "227", "228", "229", "233", "244", "255", "266", "277", "288", "299", "222"],
+          3: ["113", "133", "223", "233", "300", "330", "334", "335", "336", "337", "338", "339", "344", "355", "366", "377", "388", "399", "333"],
+          4: ["114", "144", "224", "244", "334", "344", "400", "440", "445", "446", "447", "448", "449", "455", "466", "477", "488", "499", "444"],
+          5: ["115", "155", "225", "255", "335", "355", "445", "455", "500", "550", "556", "557", "558", "559", "566", "577", "588", "599", "555"],
+          6: ["116", "166", "226", "266", "336", "366", "366", "446", "466", "556", "566", "600", "660", "667", "668", "669", "677", "688", "699", "666"],
+          7: ["117", "177", "227", "277", "337", "377", "447", "477", "557", "577", "667", "677", "700", "770", "778", "779", "788", "799", "777"],
+          8: ["118", "188", "228", "288", "338", "388", "448", "488", "558", "588", "668", "688", "778", "788", "800", "880", "889", "899", "888"],
+          9: ["119", "199", "229", "299", "339", "399", "449", "499", "559", "599", "669", "699", "779", "799", "889", "899", "900", "990", "999"]
+          };
+          
+    
+          if (!isNaN(biddingNumber) && biddingNumber.length === 1) {
+            const digit = parseInt(biddingNumber, 10);
+            const dptCommonNumbers = dptCommonMapping[digit] || [];
+            dptCommonNumbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid single-digit number for DPT Common game.');
+            return;
+          }
+        }
+
+        if (market.toLowerCase() === 'sp common') {
+          const spcMapping = {
+            0: ["120", "130", "140", "150", "160", "170", "180", "190", "230", "240", "250", "260", "270", "280", "290", "340", "350", "360", "370", "380", "390", "450", "460", "470", "480", "490", "560", "570", "580", "590", "670", "680", "690", "780", "790", "890"],
+            1: ["120", "123", "124", "125", "126", "127", "128", "129", "130", "134", "135", "136", "137", "138", "139", "140", "145", "146", "147", "148", "149", "150", "156", "157", "158", "159", "160", "167", "168", "169", "170", "178", "179", "180", "189", "190"],
+            2: ["120", "123", "124", "125", "126", "127", "128", "129", "230", "234", "235", "236", "237", "238", "239", "240", "245", "246", "247", "248", "249", "250", "256", "257", "258", "259", "260", "267", "268", "269", "270", "278", "279", "280", "289", "290"],
+            3: ["123", "130", "134", "135", "136", "137", "138", "139", "230", "234", "235", "236", "237", "238", "239", "340", "345", "346", "347", "348", "349", "350", "356", "357", "358", "359", "360", "367", "368", "369", "370", "378", "379", "380", "389", "390"],
+            4: ["124", "134", "140", "145", "146", "147", "148", "149", "234", "240", "245", "246", "247", "248", "249", "340", "345", "346", "347", "348", "349", "450", "456", "457", "458", "459", "460", "467", "468", "469", "470", "478", "479", "480", "489", "490"],
+            5: ["125", "135", "145", "150", "156", "157", "158", "159", "235", "245", "250", "256", "257", "258", "259", "345", "350", "356", "357", "358", "359", "450", "456", "457", "458", "459", "560", "567", "568", "569", "570", "578", "579", "580", "589", "590"],
+            6: ["126", "136", "146", "156", "160", "167", "168", "169", "236", "246", "256", "260", "267", "268", "269", "346", "356", "360", "367", "368", "369", "456", "460", "467", "468", "469", "560", "567", "568", "569", "670", "678", "679", "680", "689", "690"],
+            7: ["127", "137", "147", "157", "167", "170", "178", "179", "237", "247", "257", "267", "270", "278", "279", "347", "357", "367", "370", "378", "379", "457", "467", "470", "478", "479", "567", "570", "578", "579", "670", "678", "679", "780", "789", "790"],
+            8: ["128", "138", "148", "158", "168", "178", "180", "189", "238", "248", "258", "268", "278", "280", "289", "348", "358", "368", "378", "380", "389", "458", "468", "478", "480", "489", "568", "578", "580", "589", "678", "680", "689", "780", "789", "890"],
+            9: ["129", "139", "149", "159", "169", "179", "189", "190", "239", "249", "259", "269", "279", "289", "290", "349", "359", "369", "379", "389", "390", "459", "469", "479", "489", "490", "569", "579", "589", "590", "679", "689", "690", "789", "790", "890"]
+    
+          };
+          
+    
+          if (!isNaN(biddingNumber) && biddingNumber.length === 1) {
+            const digit = parseInt(biddingNumber, 10);
+            const spcNumbers = spcMapping[digit] || [];
+            spcNumbers.forEach((num) => {
+              newBiddings.push({ openClose: 'open', digit: num, points });
+            });
+          } else {
+            alert('Please enter a valid single-digit number for CHT 70 game.');
+            return;
+          }
+        }
+  
+  
+  
+  
+  
+  
+
         // Continue with other market types (cp, berries, etc.)
 
         setBiddingItems((prev) => [...prev, ...newBiddings]);
@@ -207,7 +594,7 @@ const PlayClosePage = () => {
   };
 
   const handleSubmitMarket = () => {
-    if (!market) { 
+    if (!market) {
       alert('Please select a market first.');
     } else {
       // Calculate total points
@@ -230,66 +617,76 @@ const PlayClosePage = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center p-6 flex flex-col items-center"
+      className="min-h-screen bg-cover bg-center p-4 sm:p-6 flex flex-col items-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <h1 className="text-2xl font-bold text-white mb-4">
+      <h1 className="text-xl sm:text-2xl font-bold text-white mb-4 text-center">
         {sattaName ? `${sattaName}` : 'No Satta Selected'} <span>- Close</span>
       </h1>
 
-      {/* Dropdown and Submit Button in Same Line */}
-      <div className="mb-6 flex items-center space-x-4">
-        <div className="w-64">
-          <select
-            id="market"
-            value={market}
-            onChange={(e) => setMarket(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-          >
-            <option value="default">DEFAULT</option>
-            <option value="sp">SP</option>
-            <option value="dpt">DPT</option>
-            <option value="cp">CP</option>
-            <option value="sp motors">SP MOTORS</option>
-            <option value="dp motors">DP MOTORS</option>
-            <option value="sp dp motors">SP DP MOTORS</option>
-            <option value="sp common">SP COMMON</option>
-            <option value="dpt common">DPT COMMON</option>
-            <option value="pana family">PANA FAMILY</option>
-            <option value="cht 30">CHT 30</option>
-            <option value="cht 40">CHT 40</option>
-            <option value="cht 50">CHT 50</option>
-            <option value="cht 70">CHT 70</option>
-          </select>
-        </div>
-        <button
-          onClick={handleSubmitMarket}
-          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
-        >
-          Submit
-        </button>
-      </div>
+     {/* Dropdown and Submit Button in Same Row */}
+<div className="mb-6 flex items-center justify-between space-y-4 sm:space-y-0 w-full max-w-md">
+  <select
+    id="market"
+    value={market}
+    onChange={(e) => setMarket(e.target.value)}
+    className="flex-1 px-4 py-4 border border-gray-300 rounded-lg"
+  >
+    <option value="Select Market">Select Market</option>
+    <option value="default">DEFAULT</option>
+    <option value="sp">SP</option>
+    <option value="dpt">DPT</option>
+    <option value="cp">CP</option>
+    <option value="sp motors">SP MOTORS</option>
+    <option value="dp motors">DP MOTORS</option>
+    <option value="sp dp motors">SP DP MOTORS</option>
+    <option value="sp common">SP COMMON</option>
+    <option value="dpt common">DPT COMMON</option>
+    <option value="pana family">PANA FAMILY</option>
+    <option value="cht 30">CHT 30</option>
+    <option value="cht 40">CHT 40</option>
+    <option value="cht 50">CHT 50</option>
+    <option value="cht 70">CHT 70</option>
+  </select>
+  <button
+    onClick={handleSubmitMarket}
+    className="bg-green-500 text-white py-2 px-4 ml-2 rounded-lg hover:bg-green-600 transition duration-300"
+  >
+    Submit
+  </button>
+</div>
 
       {/* Display Space for Added Items */}
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-4 mb-6">
-        <h2 className="text-lg font-bold text-gray-700 mb-4">Bidding Items</h2>
+        <h2 className="text-lg font-bold text-gray-700 mb-4 text-center sm:text-left">
+          Bidding Items
+        </h2>
         {biddingItems.length > 0 ? (
           <table className="w-full table-auto">
             <thead>
               <tr>
-                <th className="py-2 px-4 text-left text-sm font-semibold">Open/Close</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold">Digit</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold">Points</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold"></th> {/* Empty Column for Delete */}
+                <th className="py-2 px-4 text-left text-sm font-semibold">
+                  Open/Close
+                </th>
+                <th className="py-2 px-4 text-left text-sm font-semibold">
+                  Digit
+                </th>
+                <th className="py-2 px-4 text-left text-sm font-semibold">
+                  Points
+                </th>
+                <th className="py-2 px-4 text-left text-sm font-semibold"></th>
               </tr>
             </thead>
             <tbody>
               {biddingItems.map((item, index) => (
                 <tr key={index} className="border-b border-gray-300">
-                  <td className="py-2 px-4">{item.openClose}</td> {/* Always 'close' */}
+                  <td className="py-2 px-4">{item.openClose}</td>
                   <td className="py-2 px-4">{item.digit}</td>
                   <td className="py-2 px-4">{item.points}</td>
-                  <td className="py-2 px-4 text-red-500 cursor-pointer" onClick={() => handleDeleteBidding(index)}>
+                  <td
+                    className="py-2 px-4 text-red-500 cursor-pointer"
+                    onClick={() => handleDeleteBidding(index)}
+                  >
                     Delete
                   </td>
                 </tr>
@@ -297,47 +694,52 @@ const PlayClosePage = () => {
             </tbody>
           </table>
         ) : (
-          <p className="text-gray-500">No items added yet.</p>
+          <p className="text-gray-500 text-center sm:text-left">
+            No items added yet.
+          </p>
         )}
       </div>
 
-
-       {/* Total count of added items */}
-       <div className="text-white mb-4">
-        Total : {biddingItems.length}
-      </div>
+      {/* Total count of added items */}
+      <div className="text-white mb-4 text-center">Total: {biddingItems.length}</div>
 
       {/* Input Section for Bidding */}
-      <div className="flex flex-col space-y-4 w-full max-w-md">
-        <div className="flex space-x-4">
+      <div className="flex flex-col w-full max-w-md space-y-4">
+        {/* Inputs in the same line */}
+        <div className="flex flex-row justify-between gap-4">
           <input
             type="text"
             value={biddingNumber}
             onChange={(e) => setBiddingNumber(e.target.value)}
             placeholder="Bidding Number"
-            className="flex-grow px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full sm:w-[48%] px-4 py-2 border border-gray-300 rounded-lg"
           />
           <input
             type="text"
             value={points}
             onChange={(e) => setPoints(e.target.value)}
             placeholder="Points"
-            className="flex-grow px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full sm:w-[48%] px-4 py-2 border border-gray-300 rounded-lg"
           />
         </div>
-        <button
-          onClick={handleAddBidding}
-          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
-        >
-          Add
-        </button>
+
+        {/* Add Button in the next line */}
+        <div>
+          <button
+            onClick={handleAddBidding}
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+          >
+            Add
+          </button>
+        </div>
       </div>
 
       {/* Total Points */}
-      <div className="mt-4 text-white text-lg font-semibold">
-        Total Rs: {biddingItems.reduce((total, item) => total + parseFloat(item.points || 0), 0)}
-
-       
+      <div className="mt-4 text-white text-lg font-semibold text-center sm:text-left">
+        Total Rs: {biddingItems.reduce(
+          (total, item) => total + parseFloat(item.points || 0),
+          0
+        )}
       </div>
     </div>
   );

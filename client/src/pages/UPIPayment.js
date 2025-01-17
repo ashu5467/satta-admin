@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import upi from '../assets/upi.jpeg'; // Ensure the path to the UPI image is correct
 import { QRCodeSVG } from 'qrcode.react';
 
 const UPIPayment = () => {
@@ -52,12 +51,6 @@ const UPIPayment = () => {
       style={{ fontFamily: 'Segoe UI' }}
     >
       <div className="bg-white p-6 shadow-md rounded-md w-full max-w-md text-center">
-        {/* UPI Image */}
-        <img
-          src={upi}
-          alt="UPI Payment"
-          className="w-24 h-24 mx-auto mb-4 rounded-full shadow-md"
-        />
         <h1 className="text-2xl font-bold mb-4 text-blue-600">Proceed to Pay</h1>
         <p className="text-gray-700 mb-2">
           <strong>Amount:</strong> {points} INR
@@ -66,6 +59,13 @@ const UPIPayment = () => {
           <strong>Payee Name:</strong> {payeeName}
         </p>
 
+        {/* QR Code or Payment Link for Desktop Users */}
+        {!isMobile && (
+          <div className="flex justify-center items-center my-6">
+            <QRCodeSVG value={generateUPILink(payeeName, points, note, receiverUpiId)} size={150} />
+          </div>
+        )}
+
         {/* Button to trigger the payment process */}
         <button
           onClick={handlePayment}
@@ -73,14 +73,6 @@ const UPIPayment = () => {
         >
           {isMobile ? 'Pay with UPI' : 'Generate Payment Link'}
         </button>
-
-        {/* QR Code or Payment Link for Desktop Users */}
-        {!isMobile && (
-          <div className="mt-4">
-            <p className="text-gray-700 mb-2">Scan the QR code or use your mobile to pay:</p>
-            <QRCodeSVG value={generateUPILink(payeeName, points, note, receiverUpiId)} />
-          </div>
-        )}
 
         {/* Cancel button to navigate back */}
         <button

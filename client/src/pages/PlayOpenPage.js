@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import bgImage from '../assets/maroonbg.jpg'; // Ensure this image is available
+import bgImage from '../assets/maroonbg.jpg';
 
 const PlayOpenPage = () => {
   const location = useLocation();
@@ -9,25 +9,30 @@ const PlayOpenPage = () => {
   const [market, setMarket] = useState('');
   const [biddingItems, setBiddingItems] = useState([]);
   const [biddingNumber, setBiddingNumber] = useState('');
+  const [biddings, setBiddings] = useState([]);
+  const newBiddings = [];
+ 
+
   const [points, setPoints] = useState('');
 
   const handleAddBidding = () => {
     if (biddingNumber && points) {
-      const newBiddings = [];
+      // const newBiddings = [];
 
       console.log("Market value:", market);
     console.log("Bidding Number:", biddingNumber, "Points:", points);
   
-   
+  
+    const newBiddings = [];
+
+    // Handle the 'default' market case first.
     if (market.toLowerCase() === 'default') {
       newBiddings.push({ openClose: 'Open', digit: biddingNumber, points });
-
       console.log("Default Market - New Biddings:", newBiddings);
-
-      // Update your state or data here
-      setBiddingNumber((prevBiddings) => [...prevBiddings, ...newBiddings]); // Assuming `setBiddings` is your state setter
     }
+
   
+
 
 
   
@@ -178,13 +183,13 @@ const PlayOpenPage = () => {
             "367", "160", "269", "368", "467", "260", "369", "468", "567", "126", 
             "360", "469", "568", "136", "460", "569"],
           7: ["137", "470", "579", "678", "147", "237", "570", "679", "157", "247", 
-    "670", "167", "257", "347", "789", "267", "357", "780", "178", "367", 
-    "457", "790", "179", "278", "467", "170", "279", "378", "567", "270", 
-    "379", "478", "127", "370", "479", "578"],
+           "670", "167", "257", "347", "789", "267", "357", "780", "178", "367", 
+           "457", "790", "179", "278", "467", "170", "279", "378", "567", "270", 
+           "379", "478", "127", "370", "479", "578"],
           8: ["128", "380", "489", "678", "138", "480", "589", "148", "238", "580", 
-    "689", "158", "248", "680", "789", "168", "258", "348", "780", "178", 
-    "268", "358", "278", "368", "458", "890", "189", "378", "468", "180", 
-    "289", "478", "568", "280", "389", "578"],
+            "689", "158", "248", "680", "789", "168", "258", "348", "780", "178", 
+            "268", "358", "278", "368", "458", "890", "189", "378", "468", "180", 
+            "289", "478", "568", "280", "389", "578"],
           9: [ "290", "489", "579", "129", "390", "589", "679", "139", "490", "689", 
             "149", "239", "590", "789", "159", "249", "690", "169", "259", "349", 
             "790", "179", "269", "359", "890", "189", "279", "369", "459", "289", 
@@ -383,17 +388,6 @@ const PlayOpenPage = () => {
         }
       }
       
-
-
-
-
-
-
-
-
-
-
-
 
 
       if (market.toLowerCase() === 'dpt common') {
@@ -795,7 +789,7 @@ const PlayOpenPage = () => {
         };
         
   
-        if (!isNaN(biddingNumber) && biddingNumber.length === 1) {
+        if (!isNaN(biddingNumber) && biddingNumber.length === 3) {
           const digit = parseInt(biddingNumber, 10);
           const panaFamilyNumbers = panaFamilyMapping[digit] || [];
           panaFamilyNumbers.forEach((num) => {
@@ -809,12 +803,16 @@ const PlayOpenPage = () => {
 
       
 
-      setBiddingItems((prev) => [...prev, ...newBiddings]);
+      //setBiddingItems((prev) => [...prev, ...newBiddings]);
+      setBiddingItems((prev) => {
+        return [...prev, ...newBiddings];
+    });
       setBiddingNumber('');
       // setPoints('');
     }
   };
   
+
 
   const handleDeleteBidding = (index) => {
     const updatedItems = biddingItems.filter((_, i) => i !== index);
@@ -822,94 +820,80 @@ const PlayOpenPage = () => {
   };
 
   const handleSubmitMarket = () => {
-    if (!market) { 
+    if (!market) {
       alert('Please select a market first.');
     } else {
-      // Calculate total points
       const totalPoints = biddingItems.reduce(
         (total, item) => total + parseFloat(item.points || 0),
         0
       );
-  
-      // Pass all selected data to the checkout page
       navigate('/checkout', {
-        state: {
-          market,
-          biddingItems,
-          totalPoints,
-          sattaName,
-        },
+        state: { market, biddingItems, totalPoints, sattaName },
       });
     }
   };
-  
+
   return (
     <div
-      className="min-h-screen bg-cover bg-center p-6 flex flex-col items-center"
+      className="min-h-screen bg-cover bg-center p-4 sm:p-6 flex flex-col items-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <h1 className="text-2xl font-bold text-white mb-4">
+      <h1 className="text-xl sm:text-2xl font-bold text-white mb-4 text-center">
         {sattaName ? `${sattaName} - Open` : 'No Satta Selected'}
       </h1>
 
-      {/* Dropdown and Submit Button in Same Line */}
-      <div className="mb-6 flex items-center space-x-4">
-        <div className="w-64">
-          <select
-            id="market"
-            value={market}
-            onChange={(e) => setMarket(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-          >
-            <option value="default">DEFAULT</option>
-            <option value="sp">SP</option>
-            <option value="dpt">DPT</option>
-            <option value="cp">CP</option>
-            <option value="sp motors">SP MOTORS</option>
-            <option value="dp motors">DP MOTORS</option>
-            <option value="sp dp motors">SP DP MOTORS</option>
-            <option value="sp common">SP COMMON</option>
-
-
-            <option value="dpt common">DPT COMMON</option>
-
-            <option value="dbl ghar">DOUBLE GHAR</option>
-            <option value="berries">BERRIES</option>
-            <option value="otc">OTC</option>
-            <option value="half red bracket">HALF RED BRACKET</option>
-            <option value="full red bracket">FULL RED BRACKET </option>
-            <option value="jodi family">JODI FAMILY</option>
-            <option value="sp chaukada">SP CHAUKADA </option>
-            <option value="dpt chaukada">DPT CHAUKADA</option>
-            <option value="bkt bracket">BKT BRACKET </option>
-
-            
-            <option value="pana family">PANA FAMILY</option>
-            <option value="cht 30">CHT 30</option>
-            <option value="cht 40">CHT 40</option>
-            <option value="cht 50">CHT 50</option>
-            <option value="cht 70">CHT 70</option>
-          </select>
-        </div>
+      {/* Dropdown and Submit Button */}
+      <div className="mb-6 flex flex-row sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full max-w-md">
+        <select
+          id="market"
+          value={market}
+          onChange={(e) => setMarket(e.target.value)}
+          className="flex-1 px-4 py-4 border border-gray-300 rounded-lg"
+        > 
+         <option value="Select Market">Select Market</option>
+          <option value="default">DEFAULT</option>
+          <option value="sp">SP</option>
+          <option value="dpt">DPT</option>
+          <option value="cp">CP</option>
+          <option value="sp motors">SP MOTORS</option>
+          <option value="dp motors">DP MOTORS</option>
+          <option value="sp dp motors">SP DP MOTORS</option>
+          <option value="sp common">SP COMMON</option>
+          <option value="dpt common">DPT COMMON</option>
+          <option value="dbl ghar">DOUBLE GHAR</option>
+          <option value="berries">BERRIES</option>
+          <option value="otc">OTC</option>
+          <option value="half red bracket">HALF RED BRACKET</option>
+          <option value="full red bracket">FULL RED BRACKET</option>
+          <option value="jodi family">JODI FAMILY</option>
+          <option value="sp chaukada">SP CHAUKADA</option>
+          <option value="dpt chaukada">DPT CHAUKADA</option>
+          <option value="bkt bracket">BKT BRACKET</option>
+          <option value="pana family">PANA FAMILY</option>
+          <option value="cht 30">CHT 30</option>
+          <option value="cht 40">CHT 40</option>
+          <option value="cht 50">CHT 50</option>
+          <option value="cht 70">CHT 70</option>
+        </select>
         <button
           onClick={handleSubmitMarket}
-          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
+          className="bg-green-500 text-white py-2 px-4 ml-2 rounded-lg hover:bg-green-600 transition duration-300"
         >
           Submit
         </button>
       </div>
 
-      {/* Display Space for Added Items */}
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-4 mb-6">
+      {/* Bidding Items Table */}
+      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-4 mb-6 overflow-auto">
         <h2 className="text-lg font-bold text-gray-700 mb-4">Bidding Items</h2>
         {biddingItems.length > 0 ? (
-          <table className="w-full table-auto">
+          <table className="w-full table-auto text-sm">
             <thead>
               <tr>
-                <th className="py-2 px-4 text-left text-sm font-semibold">Open/Close</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold">Digit</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold">Points</th>
-                <th className="py-2 px-4 text-left text-sm font-semibold"></th> {/* Empty Column for Delete */}
+                <th className="py-2 px-4 text-left font-semibold">Open/Close</th>
+                <th className="py-2 px-4 text-left font-semibold">Digit</th>
+                <th className="py-2 px-4 text-left font-semibold">Points</th>
+                <th className="py-2 px-4"></th>
               </tr>
             </thead>
             <tbody>
@@ -918,7 +902,10 @@ const PlayOpenPage = () => {
                   <td className="py-2 px-4">{item.openClose}</td>
                   <td className="py-2 px-4">{item.digit}</td>
                   <td className="py-2 px-4">{item.points}</td>
-                  <td className="py-2 px-4 text-red-500 cursor-pointer" onClick={() => handleDeleteBidding(index)}>
+                  <td
+                    className="py-2 px-4 text-red-500 cursor-pointer"
+                    onClick={() => handleDeleteBidding(index)}
+                  >
                     Delete
                   </td>
                 </tr>
@@ -930,29 +917,22 @@ const PlayOpenPage = () => {
         )}
       </div>
 
-
-       {/* Total count of added items */}
-       <div className="text-white mb-4">
-        Total : {biddingItems.length}
-      </div>
-
       {/* Input Section for Bidding */}
       <div className="flex flex-col space-y-4 w-full max-w-md">
-        <div className="flex space-x-4">
+        <div className="flex flex-row justify-between gap-4">
           <input
-           id="biddingNumberInput" 
             type="text"
             value={biddingNumber}
             onChange={(e) => setBiddingNumber(e.target.value)}
             placeholder="Bidding Number"
-            className="flex-grow px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full sm:w-[48%] px-4 py-2 border border-gray-300 rounded-lg"
           />
           <input
             type="text"
             value={points}
             onChange={(e) => setPoints(e.target.value)}
             placeholder="Points"
-            className="flex-grow px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full sm:w-[48%] px-4 py-2 border border-gray-300 rounded-lg"
           />
         </div>
         <button
